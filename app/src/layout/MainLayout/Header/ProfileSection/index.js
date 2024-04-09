@@ -39,6 +39,9 @@ import User1 from 'assets/images/users/user-round.svg';
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
 
+//firebase
+import { signOut } from 'firebase/auth';
+import { auth } from '../../../../firebase';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
@@ -55,8 +58,17 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
-  const handleLogout = async () => {
-    console.log('Logout');
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("pages/login/login3");
+        localStorage.setItem("token", "");
+        localStorage.setItem("role", "");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleClose = (event) => {
