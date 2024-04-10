@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getAuth, getIdToken, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
