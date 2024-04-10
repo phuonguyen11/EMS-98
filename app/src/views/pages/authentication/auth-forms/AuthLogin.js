@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -60,6 +60,10 @@ const FirebaseLogin = ({ ...others }) => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
+            const auth = getAuth();
+            await signInWithEmailAndPassword(auth, values.email, values.password);
+            // Điều hướng người dùng sau khi đăng nhập thành công
+            window.location.href = 'http://localhost:3000';
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
