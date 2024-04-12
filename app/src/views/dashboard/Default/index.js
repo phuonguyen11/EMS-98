@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 // material-ui
 import { Grid } from '@mui/material';
@@ -11,14 +11,40 @@ import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
+import { AuthContext } from 'context/AuthContext';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from 'services/firebase';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
+const loadRole = async (currentUser) => {
+  const docRef = doc(db, "users", currentUser.uid);
+  const docSnap = await getDoc(docRef);
+  return await docSnap.data()?.role;
+};
 
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
+  const [role, setRole] = useState(null);
+
+  const currentUser = useContext(AuthContext);
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (currentUser) {
+        const roleData = await loadRole(currentUser);
+        if (roleData) {
+          setRole(roleData);
+          localStorage.setItem("role", roleData);
+        }
+      }
+    };
+    fetchRole();
+  }, [currentUser]);
+
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  console.log(role)
 
   return (
     <Grid container spacing={gridSpacing}>
