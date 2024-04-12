@@ -32,7 +32,7 @@ const MainRoutes = {
       children: [
         {
           path: 'default',
-          element: <DashboardDefault />
+          element: userId === null? <AuthLogin3/> :<DashboardDefault />
         }
       ]
     },
@@ -41,7 +41,7 @@ const MainRoutes = {
       children: [
         {
           path: 'util-typography',
-          element: <UtilsTypography />
+          element: userId === null? <AuthLogin3/> :<UtilsTypography />
         }
       ]
     },
@@ -50,7 +50,7 @@ const MainRoutes = {
       children: [
         {
           path: 'util-color',
-          element: <UtilsColor />
+          element: userId === null? <AuthLogin3/> :<UtilsColor />
         }
       ]
     },
@@ -59,7 +59,7 @@ const MainRoutes = {
       children: [
         {
           path: 'util-shadow',
-          element: <UtilsShadow />
+          element: userId === null? <AuthLogin3/> :<UtilsShadow />
         }
       ]
     },
@@ -68,7 +68,7 @@ const MainRoutes = {
       children: [
         {
           path: 'tabler-icons',
-          element: <UtilsTablerIcons />
+          element: userId === null? <AuthLogin3/> :<UtilsTablerIcons />
         }
       ]
     },
@@ -77,13 +77,13 @@ const MainRoutes = {
       children: [
         {
           path: 'material-icons',
-          element: <UtilsMaterialIcons />
+          element: userId === null? <AuthLogin3/> :<UtilsMaterialIcons />
         }
       ]
     },
     {
       path: 'sample-page',
-      element: <SamplePage />
+      element: userId === null? <AuthLogin3/> :<SamplePage />
     }
   ]
 };
