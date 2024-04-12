@@ -2,6 +2,8 @@ import { lazy } from 'react';
 
 // project imports
 import MainLayout from 'layout/MainLayout';
+import MinimalLayout from 'layout/MinimalLayout';
+
 import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
@@ -16,16 +18,17 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 
 // ==============================|| MAIN ROUTING ||============================== //
-
+const userId = localStorage.getItem("userId");
 const MainRoutes = {
   path: '/',
-  element: <MainLayout />,
+  element: userId === null? <MinimalLayout/> : <MainLayout />,
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: userId === null? <AuthLogin3/> : <DashboardDefault />,
     },
     {
       path: 'dashboard',

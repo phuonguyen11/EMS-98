@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../services/firebase';
 export const loadData = async (currentUser) => {
   const docRef = doc(db, 'users', currentUser.uid);
   const docSnap = await getDoc(docRef);

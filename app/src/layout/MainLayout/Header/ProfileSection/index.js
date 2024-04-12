@@ -41,7 +41,7 @@ import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-re
 
 //firebase
 import { signOut } from 'firebase/auth';
-import { auth } from '../../../../firebase';
+import { auth } from '../../../../services/firebase';
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
