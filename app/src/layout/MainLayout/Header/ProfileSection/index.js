@@ -63,8 +63,8 @@ const ProfileSection = () => {
     signOut(auth)
       .then(() => {
         navigate("pages/login/login3");
-        localStorage.setItem("token", "");
-        localStorage.setItem("role", "");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("role");
       })
       .catch((error) => {
         console.log(error);

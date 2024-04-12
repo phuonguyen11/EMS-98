@@ -1,13 +1,5 @@
 import { signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
-export const logOut = (auth) => {
-  signOut(auth)
-    .then(() => {
-      navigate('/login');
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+
 export const signIn = (e, auth) => {
   e.preventDefault();
   // get email and password from form input
