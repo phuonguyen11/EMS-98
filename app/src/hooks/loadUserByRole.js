@@ -1,5 +1,5 @@
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../services/firebase';
 export const loadUserByRole = async (role) => {
   const q = query(collection(db, 'users'), where('role', '==', role));
   const store = [];
