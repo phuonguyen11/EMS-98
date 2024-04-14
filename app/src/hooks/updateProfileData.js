@@ -23,6 +23,7 @@ export const updateProfileInformation = async (e, currentUser) => {
     throw error;
   }
 };
+
 export const updateProfileImage = async (e, currentUser) => {
   const target = e.target;
   const date = new Date().getTime();
