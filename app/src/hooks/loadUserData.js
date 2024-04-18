@@ -14,5 +14,8 @@ export const loadData = async (currentUser) => {
   //   });
   return {name: docSnap.data().name,
           role: docSnap.data().role,
-          image: docSnap.data().image};
+          image: docSnap.data().image,
+          email: docSnap.data().email
+        };
+          
 };

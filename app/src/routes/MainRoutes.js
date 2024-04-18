@@ -19,7 +19,8 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
-
+// Account Settings routing
+const AccountSettings = Loadable(lazy(() => import('views/pages/authentication/account-settings/Settings')));
 // ==============================|| MAIN ROUTING ||============================== //
 const userId = localStorage.getItem("userId");
 const MainRoutes = {
@@ -87,6 +88,10 @@ const MainRoutes = {
     {
       path: 'sample-page',
       element: userId === null? <AuthLogin3/> :<SamplePage />
+    },
+    {
+      path: 'account-settings', 
+      element: userId === null ? <AuthLogin3/> : <AccountSettings /> 
     }
   ]
 };

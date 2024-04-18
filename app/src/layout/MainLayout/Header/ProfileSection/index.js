@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
-
+import { ref } from 'firebase/storage';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -63,16 +62,15 @@ const ProfileSection = () => {
         const currentUser = auth.currentUser;
         if (currentUser) {
           const data = await loadData(currentUser);
-          setUserData(data); 
+          setUserData(data);
         }
       } catch (error) {
         console.error('Error fetching user data: ', error);
       }
     };
-
+  
     fetchUserData();
-  }, []);
-
+  }, [auth.currentUser]);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -84,7 +82,9 @@ const ProfileSection = () => {
         console.log(error);
       });
   };
-
+  const handleAccountSettings = () => {
+    navigate("/account-settings"); 
+  };
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
@@ -100,7 +100,11 @@ const ProfileSection = () => {
       navigate(route);
     }
   };
-
+  const getPostImgSrc = async (postImg) => {
+    const imgRef = ref(storage, `postsImgs/${postImg}`);    
+    const res = await getDownloadURL(imgRef);
+    return res;
+  };
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -138,7 +142,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={userData ? userData.image : ''} 
+            src={userData ? getPostImgSrc(userData.image) : ''}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
@@ -186,7 +190,7 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          {userData ? userData.name : ''} 
+                          {userData ? userData.name : ''}
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">{userData ? userData.role : ''}</Typography>
@@ -274,8 +278,8 @@ const ProfileSection = () => {
                       >
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '#')}
+                          selected={selectedIndex === 4}
+                          onClick={handleAccountSettings}
                         >
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
