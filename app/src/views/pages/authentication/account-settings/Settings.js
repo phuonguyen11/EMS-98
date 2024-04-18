@@ -7,12 +7,14 @@ import { updateProfileInformation, updateProfileImage } from '../../../../hooks/
 import React, { useState, useEffect } from 'react'; 
 import { auth } from '../../../../services/firebase';
 import { loadData } from 'hooks/loadUserData';
+
 // ================================|| ACCOUNT SETTINGS ||================================ //
 
 const AccountSettings = () => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [userData, setUserData] = useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,22 +30,24 @@ const AccountSettings = () => {
     };
   
     fetchUserData();
-  }, [auth.currentUser]);
+  }, [auth.currentUser, isSubmit]);
 
   const handleProfileInformationSubmit = async (e) => {
     e.preventDefault();
     try {
       await updateProfileInformation(e, auth.currentUser); 
       console.log('Profile information updated successfully');
+      setIsSubmit(true);
     } catch (error) {
       console.error('Error updating profile information:', error);
     }
   };
 
   const handleProfileImageSubmit = async (e) => {
-    e.preventDefault();
     try {
       await updateProfileImage(e, auth.currentUser); 
+      e.preventDefault();
+
       console.log('Profile image updated successfully');
     } catch (error) {
       console.error('Error updating profile image:', error);
@@ -66,7 +70,7 @@ const AccountSettings = () => {
                       </Grid>
                       <form onSubmit={handleProfileImageSubmit}>
                         <input type="file" accept="image/*" id="file" name="file" />
-                        <Button type="submit" variant="contained" color="primary">Update Profile Image</Button>
+                        <Button type="submit" variant="contained" color="primary" onClick={handleProfileImageSubmit} >Update Profile Image</Button>
                       </form>
                     </Grid>
                   </Grid>
@@ -81,7 +85,7 @@ const AccountSettings = () => {
                         </Typography>
                       </Stack>
                       <form onSubmit={handleProfileInformationSubmit}>
-                        <TextField id="fullName" label="Full Name" defaultValue={userData.name} fullWidth sx={{ mb: 3 }} />
+                        <TextField id="name" label="Full Name" defaultValue={userData.name} fullWidth sx={{ mb: 3 }} />
                         <TextField id="email" label="Email" defaultValue={userData.email} fullWidth sx={{ mb: 3 }} />
                         <TextField id="password" label="Password" defaultValue={userData.password} fullWidth sx={{ mb: 3 }} />
                         <TextField id="phoneNumber" label="Phone Number" defaultValue={userData.phoneNumber} fullWidth sx={{ mb: 3 }} />

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ref } from 'firebase/storage';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -100,11 +99,6 @@ const ProfileSection = () => {
       navigate(route);
     }
   };
-  const getPostImgSrc = async (postImg) => {
-    const imgRef = ref(storage, `postsImgs/${postImg}`);    
-    const res = await getDownloadURL(imgRef);
-    return res;
-  };
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -142,7 +136,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={userData ? getPostImgSrc(userData.image) : ''}
+            src={userData ? (userData.image) : ''}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
