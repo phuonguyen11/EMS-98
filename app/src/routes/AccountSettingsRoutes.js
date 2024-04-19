@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
-import AccountSettings from 'views/pages/authentication/account-settings/Settings'; 
+
 // Account Settings routing
 const AuthAccountSettings = Loadable(lazy(() => import('views/pages/authentication/account-settings/Settings')));
 
@@ -13,7 +13,7 @@ const AccountSettingsRoutes = {
   children: [
     {
       path: '/account-settings', 
-      element: <AccountSettings /> 
+      element: <AuthAccountSettings /> 
     }
   ]
 };

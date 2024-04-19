@@ -23,6 +23,7 @@ export const updateProfileInformation = async (e, currentUser) => {
     throw error;
   }
 };
+
 export const updateProfileImage = async (e, currentUser) => {
   const date = new Date().getTime();
   const file = e.target.file.files[0];

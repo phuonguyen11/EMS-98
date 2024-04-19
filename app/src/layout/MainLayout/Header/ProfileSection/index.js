@@ -22,8 +22,9 @@ import {
   Popper,
   Stack,
   Switch,
-  Typography
+  Typography,
 } from '@mui/material';
+
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -40,8 +41,10 @@ import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-re
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../../services/firebase';
 
-// ==============================|| PROFILE MENU ||============================== //
+//utlis
+import { getGreeting } from 'utils/greetings';
 
+// ==============================|| PROFILE MENU ||============================== //
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
@@ -69,7 +72,7 @@ const ProfileSection = () => {
     };
   
     fetchUserData();
-  }, [auth.currentUser]);
+  }, [auth.currentUser, userData]);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -112,6 +115,11 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+  const getCurrentTime = () => {
+    const currentTime = new Date();
+    return currentTime.getHours();
+  };
+  const greeting = useRef(getGreeting(getCurrentTime()));
   return (
     <>
       <Chip
@@ -182,7 +190,7 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
+                        <Typography variant="h4">Good {greeting.current},</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                           {userData ? userData.name : ''}
                         </Typography>
