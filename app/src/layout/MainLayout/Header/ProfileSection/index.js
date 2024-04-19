@@ -22,8 +22,9 @@ import {
   Popper,
   Stack,
   Switch,
-  Typography
+  Typography,
 } from '@mui/material';
+
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -69,7 +70,7 @@ const ProfileSection = () => {
     };
   
     fetchUserData();
-  }, [auth.currentUser]);
+  }, [auth.currentUser, userData]);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {

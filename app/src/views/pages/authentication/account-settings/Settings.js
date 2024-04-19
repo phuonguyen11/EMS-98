@@ -1,12 +1,12 @@
 import { useTheme } from '@mui/material/styles';
-import { Button, Divider, Grid, Stack, Typography, useMediaQuery, TextField, Avatar } from '@mui/material';
-import AuthWrapper1 from '../AuthWrapper1';
+import { Button, Divider, Grid, Stack, Typography, useMediaQuery, TextField, Avatar,CircularProgress} from '@mui/material';
 import AuthFooter from 'ui-component/cards/AuthFooter';
-import SettingCardWrapper from '../SettingCardWrapper';
 import { updateProfileInformation, updateProfileImage } from '../../../../hooks/updateProfileData';
 import React, { useState, useEffect } from 'react'; 
 import { auth } from '../../../../services/firebase';
 import { loadData } from 'hooks/loadUserData';
+import MainCard from 'ui-component/cards/MainCard';
+
 
 // ================================|| ACCOUNT SETTINGS ||================================ //
 
@@ -15,6 +15,7 @@ const AccountSettings = () => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [userData, setUserData] = useState(null);
   const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -30,19 +31,22 @@ const AccountSettings = () => {
     };
   
     fetchUserData();
-  }, [auth.currentUser, isSubmit]);
+  }, [auth.currentUser, userData, isSubmit]);
 
   const handleProfileInformationSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       await updateProfileInformation(e, auth.currentUser); 
       console.log('Profile information updated successfully');
       setIsSubmit(true);
     } catch (error) {
       console.error('Error updating profile information:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
+  
   const handleProfileImageSubmit = async (e) => {
     try {
       await updateProfileImage(e, auth.currentUser); 
@@ -54,13 +58,13 @@ const AccountSettings = () => {
     }
   };
 
-  if (!userData) return null; 
+  if (!userData) return <MainCard title="Please wait we are getting your information!"></MainCard>; 
   return (
-    <AuthWrapper1>
-      <SettingCardWrapper>
+      <MainCard>
         <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
           <Grid item xs={12}>
             <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
+            {isLoading? <CircularProgress/> :
               <Grid item xs={12}>
                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                   <Grid item xs={12} sm={6}>
@@ -99,15 +103,14 @@ const AccountSettings = () => {
                     <Divider />
                   </Grid>
                 </Grid>
-              </Grid>
+              </Grid>}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
             <AuthFooter />
           </Grid>
         </Grid>
-      </SettingCardWrapper>
-    </AuthWrapper1>
+      </MainCard>
   );
 };
 
