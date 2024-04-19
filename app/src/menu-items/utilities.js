@@ -1,12 +1,13 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandSuperhuman } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconTypography,
   IconPalette,
   IconShadow,
-  IconWindmill
+  IconWindmill,
+  IconBrandSuperhuman
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -16,6 +17,28 @@ const utilities = {
   title: 'Utilities',
   type: 'group',
   children: [
+    {
+      id: 'admin',
+      title: 'Administration',
+      type: 'collapse',
+      icon: icons.IconBrandSuperhuman,
+      children: [
+        {
+          id: 'student-management',
+          title: 'Student Management',
+          type: 'item',
+          url: 'admin/student-management',
+          breadcrumbs: false
+        },
+        {
+          id: 'teacher-management',
+          title: 'Teacher Management',
+          type: 'item',
+          url: 'admin/teacher-management',
+          breadcrumbs: false
+        }
+      ]
+    },
     {
       id: 'util-typography',
       title: 'Typography',
@@ -39,30 +62,6 @@ const utilities = {
       url: '/utils/util-shadow',
       icon: icons.IconShadow,
       breadcrumbs: false
-    },
-    {
-      id: 'icons',
-      title: 'Icons',
-      type: 'collapse',
-      icon: icons.IconWindmill,
-      children: [
-        {
-          id: 'tabler-icons',
-          title: 'Tabler Icons',
-          type: 'item',
-          url: '/icons/tabler-icons',
-          breadcrumbs: false
-        },
-        {
-          id: 'material-icons',
-          title: 'Material Icons',
-          type: 'item',
-          external: true,
-          target: '_blank',
-          url: 'https://mui.com/material-ui/material-icons/',
-          breadcrumbs: false
-        }
-      ]
     }
   ]
 };

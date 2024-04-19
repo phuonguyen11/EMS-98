@@ -13,8 +13,8 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
+const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
+const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -22,6 +22,7 @@ const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authen
 
 // ==============================|| MAIN ROUTING ||============================== //
 const userId = localStorage.getItem("userId");
+const role = localStorage.getItem("role")
 const MainRoutes = {
   path: '/',
   element: userId === null? <MinimalLayout/> : <MainLayout />,
@@ -39,6 +40,26 @@ const MainRoutes = {
         }
       ]
     },
+    {
+      path: 'admin',
+      children: [
+        {
+          path: 'student-management',
+          element: userId === null || role !== 'admin' ? <AuthLogin3/> :<StudentManagement />
+        }
+      ]
+    },
+    {
+      path: 'admin',
+      children: [
+        {
+          path: 'teacher-management',
+          element: userId === null || role !== 'admin'? <AuthLogin3/> :<TeacherManagement />
+        }
+      ]
+    },
+
+
     {
       path: 'utils',
       children: [
@@ -63,24 +84,6 @@ const MainRoutes = {
         {
           path: 'util-shadow',
           element: userId === null? <AuthLogin3/> :<UtilsShadow />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'tabler-icons',
-          element: userId === null? <AuthLogin3/> :<UtilsTablerIcons />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'material-icons',
-          element: userId === null? <AuthLogin3/> :<UtilsMaterialIcons />
         }
       ]
     },
