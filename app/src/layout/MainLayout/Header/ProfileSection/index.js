@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -24,8 +22,9 @@ import {
   Popper,
   Stack,
   Switch,
-  Typography
+  Typography,
 } from '@mui/material';
+
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -34,8 +33,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
-
+import { loadData } from 'hooks/loadUserData';
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
 
@@ -57,11 +55,24 @@ const ProfileSection = () => {
   const [notification, setNotification] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
-  /**
-   * anchorRef is used on different componets and specifying one type leads to other components throwing an error
-   * */
   const anchorRef = useRef(null);
+  const [userData, setUserData] = useState(null);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const data = await loadData(currentUser);
+          setUserData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching user data: ', error);
+      }
+    };
+  
+    fetchUserData();
+  }, [auth.currentUser, userData]);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -73,7 +84,9 @@ const ProfileSection = () => {
         console.log(error);
       });
   };
-
+  const handleAccountSettings = () => {
+    navigate("/account-settings"); 
+  };
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
@@ -131,7 +144,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={User1}
+            src={userData ? (userData.image) : ''}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
@@ -179,10 +192,10 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good {greeting.current},</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {userData ? userData.name : ''}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">{userData ? userData.role : ''}</Typography>
                     </Stack>
                     <OutlinedInput
                       sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
@@ -267,8 +280,8 @@ const ProfileSection = () => {
                       >
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '#')}
+                          selected={selectedIndex === 4}
+                          onClick={handleAccountSettings}
                         >
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
