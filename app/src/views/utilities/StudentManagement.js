@@ -8,10 +8,12 @@ import Table from 'ui-component/Table';
 
 // =============================|| TABLER ICONS ||============================= //
 
-const StudentManagement = () => (
+const StudentManagement = () => {
+  
+  return (
   <MainCard title="Student Management" secondary={<SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />}>
     <Table/>
   </MainCard>
-);
+)};
 
 export default StudentManagement;

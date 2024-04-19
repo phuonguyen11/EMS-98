@@ -1,5 +1,5 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandSuperhuman } from '@tabler/icons-react';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandSuperhuman, IconNotebook, IconUserShield } from '@tabler/icons-react';
 
 // constant
 const icons = {
@@ -7,7 +7,9 @@ const icons = {
   IconPalette,
   IconShadow,
   IconWindmill,
-  IconBrandSuperhuman
+  IconBrandSuperhuman,
+  IconNotebook,
+  IconUserShield
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -19,7 +21,7 @@ const utilities = {
   children: [
     {
       id: 'admin',
-      title: 'Administration',
+      title: 'iAdmin',
       type: 'collapse',
       icon: icons.IconBrandSuperhuman,
       children: [
@@ -39,30 +41,63 @@ const utilities = {
         }
       ]
     },
+
     {
-      id: 'util-typography',
-      title: 'Typography',
-      type: 'item',
-      url: '/utils/util-typography',
-      icon: icons.IconTypography,
-      breadcrumbs: false
+      id: 'student',
+      title: 'iStudent',
+      type: 'collapse',
+      icon: icons.IconNotebook,
+      children: [
+        {
+          id: 'schedule',
+          title: 'Schedule',
+          type: 'item',
+          url: 'student/schedule',
+          breadcrumbs: false
+        }
+      ]
     },
     {
-      id: 'util-color',
-      title: 'Color',
-      type: 'item',
-      url: '/utils/util-color',
-      icon: icons.IconPalette,
-      breadcrumbs: false
+      id: 'teacher',
+      title: 'iTeacher',
+      type: 'collapse',
+      icon: icons.IconUserShield,
+      children: [
+        {
+          id: 'grade',
+          title: 'Grading',
+          type: 'item',
+          url: 'teacher/grading',
+          breadcrumbs: false
+        }
+      ]
     },
-    {
-      id: 'util-shadow',
-      title: 'Shadow',
-      type: 'item',
-      url: '/utils/util-shadow',
-      icon: icons.IconShadow,
-      breadcrumbs: false
-    }
+
+
+    // {
+    //   id: 'util-typography',
+    //   title: 'Typography',
+    //   type: 'item',
+    //   url: '/utils/util-typography',
+    //   icon: icons.IconTypography,
+    //   breadcrumbs: false
+    // },
+    // {
+    //   id: 'util-color',
+    //   title: 'Color',
+    //   type: 'item',
+    //   url: '/utils/util-color',
+    //   icon: icons.IconPalette,
+    //   breadcrumbs: false
+    // },
+    // {
+    //   id: 'util-shadow',
+    //   title: 'Shadow',
+    //   type: 'item',
+    //   url: '/utils/util-shadow',
+    //   icon: icons.IconShadow,
+    //   breadcrumbs: false
+    // }
   ]
 };
 

@@ -45,7 +45,7 @@ const MainRoutes = {
       children: [
         {
           path: 'student-management',
-          element: userId === null || role !== 'admin' ? <AuthLogin3/> :<StudentManagement />
+          element: userId === null || role !== 'admin' ? <AuthLogin3 requiredRole = 'Admin' /> :<StudentManagement/>
         }
       ]
     },
@@ -54,7 +54,7 @@ const MainRoutes = {
       children: [
         {
           path: 'teacher-management',
-          element: userId === null || role !== 'admin'? <AuthLogin3/> :<TeacherManagement />
+          element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<TeacherManagement/>
         }
       ]
     },

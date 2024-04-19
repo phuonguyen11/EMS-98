@@ -5,7 +5,6 @@ import {
 } from 'material-react-table';
 
 
-//mock data - strongly typed if you are using TypeScript (optional, but recommended)
 const data = [
   {
     name: 'John',
