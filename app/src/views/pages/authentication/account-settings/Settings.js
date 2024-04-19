@@ -4,7 +4,7 @@ import AuthWrapper1 from '../AuthWrapper1';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 import SettingCardWrapper from '../SettingCardWrapper';
 import { updateProfileInformation, updateProfileImage } from '../../../../hooks/updateProfileData';
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import { auth } from '../../../../services/firebase';
 import { loadData } from 'hooks/loadUserData';
 
@@ -28,14 +28,14 @@ const AccountSettings = () => {
         console.error('Error fetching user data: ', error);
       }
     };
-  
+
     fetchUserData();
   }, [auth.currentUser, isSubmit]);
 
   const handleProfileInformationSubmit = async (e) => {
     e.preventDefault();
     try {
-      await updateProfileInformation(e, auth.currentUser); 
+      await updateProfileInformation(e, auth.currentUser);
       console.log('Profile information updated successfully');
       setIsSubmit(true);
     } catch (error) {
@@ -44,17 +44,17 @@ const AccountSettings = () => {
   };
 
   const handleProfileImageSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await updateProfileImage(e, auth.currentUser); 
-      e.preventDefault();
-
+      await updateProfileImage(e, auth.currentUser);
       console.log('Profile image updated successfully');
+      setIsSubmit(!isSubmit);
     } catch (error) {
       console.error('Error updating profile image:', error);
     }
   };
 
-  if (!userData) return null; 
+  if (!userData) return null;
   return (
     <AuthWrapper1>
       <SettingCardWrapper>
@@ -69,8 +69,13 @@ const AccountSettings = () => {
                         <Avatar alt="User Avatar" src={userData.image} sx={{ width: 200, height: 200 }} />
                       </Grid>
                       <form onSubmit={handleProfileImageSubmit}>
-                        <input type="file" accept="image/*" id="file" name="file" />
-                        <Button type="submit" variant="contained" color="primary" onClick={handleProfileImageSubmit} >Update Profile Image</Button>
+                        <input style={{ display: 'none' }} type="file" id="file" name="file" />
+                        <label htmlFor="file">
+                          <span>Add an avatar</span>
+                        </label>
+                        <Button color="primary" type="submit">
+                          Update Profile Image
+                        </Button>
                       </form>
                     </Grid>
                   </Grid>
@@ -91,7 +96,9 @@ const AccountSettings = () => {
                         <TextField id="phoneNumber" label="Phone Number" defaultValue={userData.phoneNumber} fullWidth sx={{ mb: 3 }} />
                         <TextField id="identityCard" label="Identity Card" defaultValue={userData.identityCard} fullWidth sx={{ mb: 3 }} />
                         <TextField id="address" label="Address" defaultValue={userData.address} fullWidth sx={{ mb: 3 }} />
-                        <Button type="submit" variant="contained" color="primary">Update Information</Button>
+                        <Button type="submit" variant="contained" color="primary">
+                          Update Information
+                        </Button>
                       </form>
                     </Grid>
                   </Grid>

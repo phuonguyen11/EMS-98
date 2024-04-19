@@ -24,22 +24,19 @@ export const updateProfileInformation = async (e, currentUser) => {
   }
 };
 export const updateProfileImage = async (e, currentUser) => {
-  const target = e.target;
   const date = new Date().getTime();
-  const file = target.file.files[0];
-  console.log(file);
+  const file = e.target.file.files[0];
   const storageRef = ref(storage, `avatar_${date}`);
   try {
     await uploadBytesResumable(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
-
     if (currentUser) {
       await updateDoc(doc(db, 'users', currentUser.uid), {
         uid: currentUser.uid,
         image: downloadURL
       });
       console.log('Avatar updated successfully');
-      return '/'; // Assuming "/" is the success route
+      return downloadURL; // Assuming "/" is the success route
     }
   } catch (error) {
     console.error('Error submitting profile:', error);
