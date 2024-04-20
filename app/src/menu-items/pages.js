@@ -1,9 +1,10 @@
 // assets
 import { IconKey } from '@tabler/icons-react';
-
+import { IconBrandSuperhuman } from '@tabler/icons-react';
 // constant
 const icons = {
-  IconKey
+  IconKey,
+  IconBrandSuperhuman
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -19,7 +20,6 @@ const pages = {
       title: 'Authentication',
       type: 'collapse',
       icon: icons.IconKey,
-
       children: [
         {
           id: 'login',
@@ -29,7 +29,7 @@ const pages = {
           target: true
         }
       ]
-    }
+    },
   ]
 };
 

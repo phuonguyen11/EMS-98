@@ -10,14 +10,16 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
 import AuthFooter from 'ui-component/cards/AuthFooter';
+import PropTypes from 'prop-types'
 
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
 
-const Login = () => {
+const Login = ({requiredRole}) => {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const role = localStorage.getItem("role");
 
   return (
     <AuthWrapper1>
@@ -36,9 +38,15 @@ const Login = () => {
                     <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
+                          {!role?
                           <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                             Hi, Welcome Back
                           </Typography>
+                          :
+                          <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                            Please login as {requiredRole} to continue!
+                          </Typography>
+                          }
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
                             Enter your credentials to continue
                           </Typography>
@@ -63,6 +71,10 @@ const Login = () => {
       </Grid>
     </AuthWrapper1>
   );
+};
+
+Login.propTypes = {
+  requiredRole: PropTypes.string,
 };
 
 export default Login;

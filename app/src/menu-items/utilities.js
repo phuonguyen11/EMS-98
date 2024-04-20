@@ -1,12 +1,15 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
+import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandSuperhuman, IconNotebook, IconUserShield } from '@tabler/icons-react';
 
 // constant
 const icons = {
   IconTypography,
   IconPalette,
   IconShadow,
-  IconWindmill
+  IconWindmill,
+  IconBrandSuperhuman,
+  IconNotebook,
+  IconUserShield
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -17,53 +20,84 @@ const utilities = {
   type: 'group',
   children: [
     {
-      id: 'util-typography',
-      title: 'Typography',
-      type: 'item',
-      url: '/utils/util-typography',
-      icon: icons.IconTypography,
-      breadcrumbs: false
-    },
-    {
-      id: 'util-color',
-      title: 'Color',
-      type: 'item',
-      url: '/utils/util-color',
-      icon: icons.IconPalette,
-      breadcrumbs: false
-    },
-    {
-      id: 'util-shadow',
-      title: 'Shadow',
-      type: 'item',
-      url: '/utils/util-shadow',
-      icon: icons.IconShadow,
-      breadcrumbs: false
-    },
-    {
-      id: 'icons',
-      title: 'Icons',
+      id: 'admin',
+      title: 'iAdmin',
       type: 'collapse',
-      icon: icons.IconWindmill,
+      icon: icons.IconBrandSuperhuman,
       children: [
         {
-          id: 'tabler-icons',
-          title: 'Tabler Icons',
+          id: 'student-management',
+          title: 'Student Management',
           type: 'item',
-          url: '/icons/tabler-icons',
+          url: 'admin/student-management',
           breadcrumbs: false
         },
         {
-          id: 'material-icons',
-          title: 'Material Icons',
+          id: 'teacher-management',
+          title: 'Teacher Management',
           type: 'item',
-          external: true,
-          target: '_blank',
-          url: 'https://mui.com/material-ui/material-icons/',
+          url: 'admin/teacher-management',
           breadcrumbs: false
         }
       ]
-    }
+    },
+
+    {
+      id: 'student',
+      title: 'iStudent',
+      type: 'collapse',
+      icon: icons.IconNotebook,
+      children: [
+        {
+          id: 'schedule',
+          title: 'Schedule',
+          type: 'item',
+          url: 'student/schedule',
+          breadcrumbs: false
+        }
+      ]
+    },
+    {
+      id: 'teacher',
+      title: 'iTeacher',
+      type: 'collapse',
+      icon: icons.IconUserShield,
+      children: [
+        {
+          id: 'grade',
+          title: 'Grading',
+          type: 'item',
+          url: 'teacher/grading',
+          breadcrumbs: false
+        }
+      ]
+    },
+
+
+    // {
+    //   id: 'util-typography',
+    //   title: 'Typography',
+    //   type: 'item',
+    //   url: '/utils/util-typography',
+    //   icon: icons.IconTypography,
+    //   breadcrumbs: false
+    // },
+    // {
+    //   id: 'util-color',
+    //   title: 'Color',
+    //   type: 'item',
+    //   url: '/utils/util-color',
+    //   icon: icons.IconPalette,
+    //   breadcrumbs: false
+    // },
+    // {
+    //   id: 'util-shadow',
+    //   title: 'Shadow',
+    //   type: 'item',
+    //   url: '/utils/util-shadow',
+    //   icon: icons.IconShadow,
+    //   breadcrumbs: false
+    // }
   ]
 };
 
