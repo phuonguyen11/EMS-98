@@ -12,14 +12,15 @@ import StudentTable from 'ui-component/StudentTable';
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
 
-  useEffect(async() => {
+  const fetchStudents = async() => {
     const studentList = await loadUserByRole("student");
     if (studentList) {
       setStudents(studentList);
     }
-  }, []);
-
-
+  }
+  useEffect(() =>{
+    fetchStudents();
+   },[])
   return (
   <MainCard title="Student Management" secondary={<SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />}>
     {students? <StudentTable data={students} />: <CircularProgress/>}

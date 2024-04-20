@@ -12,13 +12,16 @@ import { CircularProgress } from '@mui/material';
 const TeacherManagement = () => {
   const [teachers, setTeachers] = useState([]);
 
-  useEffect(async() => {
+  const fetchTeachers = async() => {
     const teacherList = await loadUserByRole("teacher");
     if (teacherList) {
       setTeachers(teacherList);
     }
-  }, []);
-
+  }
+  useEffect(() =>{
+    fetchTeachers();
+   },[])
+   
   return (
     <MainCard title="Teacher Management" secondary={<SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />}>
       {teachers? <TeacherTable data={teachers} />: <CircularProgress/>}
