@@ -5,7 +5,7 @@ import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 
 // assets
 import LinkIcon from '@mui/icons-material/Link';
-import TeacherTable from 'ui-component/TeacherTable';
+import TeacherTable from 'ui-component/table/TeacherTable';
 import { loadUserByRole } from 'hooks/loadUserByRole';
 import { CircularProgress } from '@mui/material';
 

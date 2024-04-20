@@ -7,7 +7,7 @@ import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 import LinkIcon from '@mui/icons-material/Link';
 import { loadUserByRole } from 'hooks/loadUserByRole';
 import { CircularProgress } from '@mui/material';
-import StudentTable from 'ui-component/StudentTable';
+import StudentTable from 'ui-component/table/StudentTable';
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
