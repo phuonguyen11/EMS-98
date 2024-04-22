@@ -81,9 +81,9 @@ const Table = ({data,openModal}) => {
                 component="span"
                 sx={(theme) => ({
                   backgroundColor:
-                    cell.getValue() < 2.0
+                    cell.getValue() < 5.0
                       ? theme.palette.error.dark
-                      : cell.getValue() >= 2.0 && cell.getValue() < 3.0
+                      : cell.getValue() >= 5.0 && cell.getValue() < 8.0
                         ? theme.palette.warning.dark
                         : theme.palette.success.dark,
                   borderRadius: '0.25rem',
