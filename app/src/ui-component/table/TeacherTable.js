@@ -14,7 +14,7 @@ import {
   Typography,
   lighten,
 } from '@mui/material';
-
+import { userIcon } from 'ui-component/icons';
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 // import PropTypes from 'prop-types'
@@ -44,7 +44,7 @@ const Table = ({data, openModal}) => {
                   alt="avatar"
                   width={'100%'}
                   height={'100%'}
-                  src={row.original.image}
+                  src={row.original.image? row.original.image : userIcon}
                   loading="lazy"
                   style={{borderRadius: '50%'}}
                 />
@@ -174,7 +174,7 @@ const Table = ({data, openModal}) => {
           alt="avatar"
           width='100%'
           height='100%'
-          src={row.original.image}
+          src={row.original.image? row.original.image : userIcon}
           loading="lazy"
           style={{ borderRadius: '50%'}}
         />

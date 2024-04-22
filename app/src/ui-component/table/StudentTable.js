@@ -18,6 +18,7 @@ import {
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 // import PropTypes from 'prop-types'
+import { userIcon } from 'ui-component/icons';
 
 const Table = ({data,openModal}) => {
   const columns = useMemo(
@@ -44,7 +45,7 @@ const Table = ({data,openModal}) => {
                   alt="avatar"
                   width={'100%'}
                   height={'100%'}
-                  src={row.original.image}
+                  src={row.original.image? row.original.image : userIcon}
                   loading="lazy"
                   style={{borderRadius: '50%'}}
                 />
@@ -172,7 +173,7 @@ const Table = ({data,openModal}) => {
           alt="avatar"
           width='100%'
           height='100%'
-          src={row.original.image}
+          src={row.original.image?row.original.image : userIcon}
           loading="lazy"
           style={{ borderRadius: '50%'}}
         />

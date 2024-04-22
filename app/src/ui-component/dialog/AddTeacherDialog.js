@@ -12,9 +12,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContentText from "@mui/material/DialogContentText";
 import { FormHelperText } from "@mui/material";
-import { createUser } from "hooks/createAccount";
-import { auth } from "services/firebase";
 import { isValidEmail } from "utils/validEmail";
+import { createAccount } from "hooks/createAccount";
 
 const AddTeacherDialog = ({
   openAddDialog,
@@ -52,11 +51,10 @@ const AddTeacherDialog = ({
       password: password,
       role: "teacher",
     };
-    const currentUser = auth.currentUser;
-    await createUser(output, currentUser);
-    fetchTeachers();
+    await createAccount(output);
     onClose();
-  };
+    fetchTeachers();
+};
 
   const clearError = () => {
     setEmailError("");

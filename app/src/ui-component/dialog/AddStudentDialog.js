@@ -12,15 +12,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContentText from "@mui/material/DialogContentText";
 import { FormHelperText } from "@mui/material";
-import { createUser } from "hooks/createAccount";
-import { auth } from "services/firebase";
 import { isValidEmail } from "utils/validEmail";
-
+import { createAccount } from "hooks/createAccount";
 const AddStudentDialog = ({
   openAddDialog,
   handleAddDialogClose,
   fetchStudents,
 }) => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -53,10 +52,10 @@ const AddStudentDialog = ({
       password: password,
       role: "student",
     };
-    const currentUser = auth.currentUser;
-    await createUser(output, currentUser);
-    fetchStudents();
+    await createAccount(output);
     onClose();
+    fetchStudents();
+
   };
 
   const clearError = () => {

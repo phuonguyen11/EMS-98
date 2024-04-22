@@ -1,9 +1,10 @@
 import { setDoc, doc } from "firebase/firestore";
 import { db } from "services/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "services/firebase";
 
 export const createUser = async (output, currentUser) => {
-    console.log("gogo");
-
+    
     const email = output.email;
     const password = output.password;
     const role = output.role;
@@ -20,3 +21,14 @@ export const createUser = async (output, currentUser) => {
     }
   };
   
+export const createAccount = (output) => {
+    createUserWithEmailAndPassword(auth, output.email, output.password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        createUser(output, userCredential.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
