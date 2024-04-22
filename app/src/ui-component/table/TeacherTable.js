@@ -19,7 +19,7 @@ import {
 import { AccountCircle, Send } from '@mui/icons-material';
 // import PropTypes from 'prop-types'
 
-const Table = ({data}) => {
+const Table = ({data, openModal}) => {
   const columns = useMemo(
     () => [
       {
@@ -228,12 +228,6 @@ const Table = ({data}) => {
         });
       };
 
-      const handleContact = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('contact ' + row.getValue('name'));
-        });
-      };
-
       return (
         <Box
           sx={(theme) => ({
@@ -269,11 +263,10 @@ const Table = ({data}) => {
               </Button>
               <Button
                 color="info"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleContact}
+                onClick={openModal}
                 variant="contained"
               >
-                Contact
+                Add New Teacher Account
               </Button>
             </Box>
           </Box>
@@ -289,10 +282,10 @@ const Table = ({data}) => {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-const TeacherTable = ({data}) => (
+const TeacherTable = ({data, openModal}) => (
   //App.tsx or AppProviders file
   <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <Table data={data}/>
+    <Table data={data} openModal={openModal}/>
   </LocalizationProvider>
 );
 

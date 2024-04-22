@@ -80,7 +80,7 @@ const AccountSettings = () => {
                         <label htmlFor="file">
                           <span>Add an avatar</span>
                         </label>
-                        <Button color="primary" type="submit">
+                        <Button color="primary" type="submit" onClick={()=>fetchUserData()}>
                           Update Profile Image
                         </Button>
                       </form>
