@@ -27,7 +27,15 @@ const pages = {
           type: 'item',
           url: '/pages/login/login3',
           target: true
+        },
+        {
+          id: 'change-password',
+          title: 'Change Password',
+          type: 'item',
+          url: '/pages/change-password',
+          target: true
         }
+
       ]
     },
   ]
