@@ -98,10 +98,8 @@ const AccountSettings = () => {
                       </Stack>
                       <form onSubmit={handleProfileInformationSubmit}>
                         <TextField id="name" label="Full Name" defaultValue={userData.name} fullWidth sx={{ mb: 3 }} />
-                        <TextField id="email" label="Email" defaultValue={userData.email} fullWidth sx={{ mb: 3 }} />
-                        <TextField id="password" label="Password" defaultValue={userData.password} fullWidth sx={{ mb: 3 }} />
-                        <TextField id="phoneNumber" label="Phone Number" defaultValue={userData.phoneNumber} fullWidth sx={{ mb: 3 }} />
-                        <TextField id="identityCard" label="Identity Card" defaultValue={userData.identityCard} fullWidth sx={{ mb: 3 }} />
+                        <TextField id="phone" label="Phone Number" defaultValue={userData.phone} fullWidth sx={{ mb: 3 }} />                        
+                        <TextField id="identitycard" label="Identity Card" defaultValue={userData.identitycard} fullWidth sx={{ mb: 3 }} />
                         <TextField id="address" label="Address" defaultValue={userData.address} fullWidth sx={{ mb: 3 }} />
                         <Button type="submit" variant="contained" color="primary" onClick={()=>fetchUserData()}>
                           Update Information

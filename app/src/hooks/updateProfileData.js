@@ -5,15 +5,17 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 export const updateProfileInformation = async (e, currentUser) => {
   const target = e.target;
   const name = target.name.value;
-  const email = target.email.value;
-  const password = target.password.value;
+  const phone = target.phone.value;
+  const identitycard = target.identitycard.value;
+  const address= target.address.value;
   try {
     if (currentUser) {
       await updateDoc(doc(db, 'users', currentUser.uid), {
         uid: currentUser.uid,
         name,
-        email,
-        password
+        phone,
+        identitycard,
+        address
       });
       console.log('Profile updated successfully');
       return '/'; // Assuming "/" is the success route
