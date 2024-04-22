@@ -16,21 +16,22 @@ const AccountSettings = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const data = await loadData(currentUser);
-          setUserData(data);
-        }
-      } catch (error) {
-        console.error('Error fetching user data: ', error);
+  const fetchUserData = async () => {
+    try {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const data = await loadData(currentUser);
+        setUserData(data);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user data: ', error);
+    }
+  };
 
+
+  useEffect(() => {
     fetchUserData();
-  }, [auth.currentUser, userData, isSubmit]);
+  }, []);
 
   const handleProfileInformationSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ const AccountSettings = () => {
       console.error('Error updating profile information:', error);
     } finally {
       setIsLoading(false);
+      fetchUserData();
     }
   };
 
@@ -101,7 +103,7 @@ const AccountSettings = () => {
                         <TextField id="phoneNumber" label="Phone Number" defaultValue={userData.phoneNumber} fullWidth sx={{ mb: 3 }} />
                         <TextField id="identityCard" label="Identity Card" defaultValue={userData.identityCard} fullWidth sx={{ mb: 3 }} />
                         <TextField id="address" label="Address" defaultValue={userData.address} fullWidth sx={{ mb: 3 }} />
-                        <Button type="submit" variant="contained" color="primary">
+                        <Button type="submit" variant="contained" color="primary" onClick={()=>fetchUserData()}>
                           Update Information
                         </Button>
                       </form>

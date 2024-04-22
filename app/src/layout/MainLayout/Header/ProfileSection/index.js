@@ -58,21 +58,22 @@ const ProfileSection = () => {
   const anchorRef = useRef(null);
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const data = await loadData(currentUser);
-          setUserData(data);
-        }
-      } catch (error) {
-        console.error('Error fetching user data: ', error);
+  const fetchUserData = async () => {
+    try {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const data = await loadData(currentUser);
+        setUserData(data);
       }
-    };
-  
+    } catch (error) {
+      console.error('Error fetching user data: ', error);
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
-  }, [auth.currentUser, userData]);
+  }, [open]);
+
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
