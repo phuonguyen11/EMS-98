@@ -11,3 +11,14 @@ export const loadUserByRole = async (role) => {
   });
   return store;
 };
+export const loadUserByEmail = async (email) => {
+  const q = query(collection(db, 'users'), where('email', '==', email));
+  const store = [];
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    // console.log(doc.id, " => ", doc.data());
+    store.push(doc.data());
+  });
+  return store;
+};

@@ -15,10 +15,13 @@ import {
   lighten,
 } from '@mui/material';
 
+import toast, {Toaster} from 'react-hot-toast';
+
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 // import PropTypes from 'prop-types'
 import { userIcon } from 'ui-component/icons';
+import { updateActiveStatus } from 'hooks/updateProfileData';
 
 const Table = ({data,openModal}) => {
   const columns = useMemo(
@@ -61,6 +64,29 @@ const Table = ({data,openModal}) => {
             filterVariant: 'autocomplete',
             header: 'Email',
             size: 300,
+          },
+          {
+            accessorKey: 'isActive', //hey a simple column for once
+            accessorFn: (row) => `${row.isActive? 'Active' : "Inactive"}`, //accessorFn used to join multiple data into a single cell
+            header: 'Active Status',
+            size: 100,
+            Cell: ({ cell }) => (
+              <Box
+                component="span"
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() === 'Active'
+                      ? theme.palette.info.light
+                      : "#808080",
+                  borderRadius: '0.25rem',
+                  color: '#fff',
+                  maxWidth: '9ch',
+                  p: '0.25rem',
+                })}
+              >
+                {cell.getValue()}
+              </Box>
+            )
           },
         ],
       },
@@ -215,18 +241,20 @@ const Table = ({data,openModal}) => {
       </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
-      const handleDeactivate = () => {
+      const handleDeactivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
-          alert('deactivating ' + row.getValue('name'));
+          updateActiveStatus(row.getValue('email'), false)
+          toast.success('Deactivating ' + row.getValue('name'));
         });
       };
 
-      const handleActivate = () => {
+      const handleActivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
-          alert('activating ' + row.getValue('name'));
+          updateActiveStatus(row.getValue('email'), true)
+          toast.success('Activating ' + row.getValue('name'));
         });
       };
-
+          
       return (
         <Box
           sx={(theme) => ({
@@ -281,9 +309,11 @@ const Table = ({data,openModal}) => {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
+
 const StudentTable = ({data, openModal}) => (
   //App.tsx or AppProviders file
   <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <div><Toaster position='top-right'/></div>
     <Table data={data} openModal={openModal}/>
   </LocalizationProvider>
 );

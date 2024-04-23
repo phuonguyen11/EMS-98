@@ -17,6 +17,8 @@ import {
 import { userIcon } from 'ui-component/icons';
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
+import { updateActiveStatus } from 'hooks/updateProfileData';
+
 // import PropTypes from 'prop-types'
 
 const Table = ({data, openModal}) => {
@@ -60,6 +62,29 @@ const Table = ({data, openModal}) => {
             filterVariant: 'autocomplete',
             header: 'Email',
             size: 300,
+          },
+          {
+            accessorKey: 'isActive', //hey a simple column for once
+            accessorFn: (row) => `${row.isActive? 'Active' : "Inactive"}`, //accessorFn used to join multiple data into a single cell
+            header: 'Active Status',
+            size: 100,
+            Cell: ({ cell }) => (
+              <Box
+                component="span"
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() === 'Active'
+                      ? theme.palette.info.light
+                      : "#808080",
+                  borderRadius: '0.25rem',
+                  color: '#fff',
+                  maxWidth: '9ch',
+                  p: '0.25rem',
+                })}
+              >
+                {cell.getValue()}
+              </Box>
+            )
           },
         ],
       },
@@ -216,18 +241,20 @@ const Table = ({data, openModal}) => {
       </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
-      const handleDeactivate = () => {
+      const handleDeactivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
+          updateActiveStatus(row.getValue('email'), false)
           alert('deactivating ' + row.getValue('name'));
         });
       };
 
-      const handleActivate = () => {
+      const handleActivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
+          updateActiveStatus(row.getValue('email'), true)
           alert('activating ' + row.getValue('name'));
         });
       };
-
+      
       return (
         <Box
           sx={(theme) => ({
