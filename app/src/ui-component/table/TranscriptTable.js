@@ -105,7 +105,7 @@ const Table = ({ data,gpa }) => {
                     borderRadius: '0.25rem',
                 }}
             >
-                <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'right' ,color: 'blue', paddingRight: 60 }}>
+                <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'left' ,color: 'blue', paddingLeft: 100 }}>
                     GPA :  {gpa}
                 </Typography>
             </Box>
