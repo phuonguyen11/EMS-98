@@ -19,7 +19,7 @@ import { userIcon } from 'ui-component/icons';
 import { AccountCircle, Send } from '@mui/icons-material';
 import { updateActiveStatus } from 'hooks/updateProfileData';
 import toast, {Toaster} from 'react-hot-toast';
-
+import { updateTeacherDetail } from 'hooks/updateProfileData';
 // import PropTypes from 'prop-types'
 
 const Table = ({data, openModal}) => {
@@ -62,12 +62,14 @@ const Table = ({data, openModal}) => {
             enableClickToCopy: true,
             filterVariant: 'autocomplete',
             header: 'Email',
+            enableEditing: false,
             size: 300,
           },
           {
             accessorKey: 'isActive', //hey a simple column for once
             accessorFn: (row) => `${row.isActive? 'Active' : "Inactive"}`, //accessorFn used to join multiple data into a single cell
             header: 'Active Status',
+            enableEditing: false,
             size: 100,
             Cell: ({ cell }) => (
               <Box
@@ -117,7 +119,7 @@ const Table = ({data, openModal}) => {
                   p: '0.25rem',
                 })}
               >
-                {cell.getValue()?.toLocaleString?.('en-US', {
+                { Number(cell.getValue())?.toLocaleString?.('en-US', {
                   style: 'currency',
                   currency: 'VND',
                   minimumFractionDigits: 0,
@@ -126,6 +128,11 @@ const Table = ({data, openModal}) => {
                 }
               </Box>
             ),
+          },
+          {
+            accessorKey: 'department', //hey a simple column for once
+            header: 'Department',
+            size: 350,
           },
           {
             accessorKey: 'jobTitle', //hey a simple column for once
@@ -139,7 +146,11 @@ const Table = ({data, openModal}) => {
             filterVariant: 'date',
             filterFn: 'lessThan',
             sortingFn: 'datetime',
-            Cell: ({ cell }) => cell.getValue()?.toLocaleDateString(), //render Date as a string
+            muiEditTextFieldProps: {
+              type: 'date',
+              required: true,
+            },
+            Cell: ({ cell }) => new Date(cell.getValue())?.toLocaleDateString(), //render Date as a string
             Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
             muiFilterTextFieldProps: {
               sx: {
@@ -156,6 +167,19 @@ const Table = ({data, openModal}) => {
   const table = useMaterialReactTable({
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    enableEditing: true,
+    editDisplayMode: 'modal', //default
+    onEditingRowSave: async({ table, values }) => {
+      //validate data
+      //save data to api
+      console.log(values)
+      await updateTeacherDetail(values);
+
+      table.setEditingRow(null); //exit editing mode
+    },
+    onEditingRowCancel: () => {
+      //clear any validation errors
+    },
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,
