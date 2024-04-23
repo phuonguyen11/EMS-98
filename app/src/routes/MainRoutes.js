@@ -15,6 +15,7 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
+const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -59,7 +60,15 @@ const MainRoutes = {
         }
       ]
     },
-
+    {
+      path: 'student',
+      children: [
+        {
+          path: 'student-transcript',
+          element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<StudentTranscript/>
+        }
+      ]
+    },
 
     {
       path: 'utils',
