@@ -1,6 +1,7 @@
 import { db, storage } from '../services/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { loadUserByEmail } from './loadUserByRole';
 
 export const updateProfileInformation = async (e, currentUser) => {
   const target = e.target;
@@ -25,6 +26,27 @@ export const updateProfileInformation = async (e, currentUser) => {
     throw error;
   }
 };
+
+export const updateActiveStatus = async (email, activeStatus) => {
+  try {
+    if (email) {
+      const user = await loadUserByEmail(email);
+      const isActive = activeStatus;
+      if(user.length > 0)
+      {
+        await updateDoc(doc(db, 'users', user[0].uid), {
+          uid: user[0].uid,
+          isActive
+        });
+        console.log('Status updated successfully');
+    }
+    }
+  } catch (error) {
+    console.error('Error updating status:', error);
+    throw error;
+  }
+};
+
 
 export const updateProfileImage = async (e, currentUser) => {
   const date = new Date().getTime();
