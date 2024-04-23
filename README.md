@@ -1,6 +1,6 @@
-# Education Management - Web App UI Setup
+# Education Management System (EMS)
 
-This repository contains the files necessary to set up the user interface (UI) for the app.
+This repository contains the files necessary to set up for the app.
 
 ## Setup Instructions
 
