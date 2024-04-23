@@ -106,7 +106,7 @@ const Table = ({ data,gpa }) => {
                 }}
             >
                 <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'left' ,color: 'blue', paddingLeft: 100 }}>
-                    GPA :  {gpa}
+                    GPA :  {gpa?.toFixed(1)}
                 </Typography>
             </Box>
         </div>
