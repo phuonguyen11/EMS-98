@@ -47,6 +47,53 @@ export const updateActiveStatus = async (email, activeStatus) => {
   }
 };
 
+export const updateStudentDetail = async (values) => {
+  try {
+    const email = values.email;
+    if (email) {
+      const user = await loadUserByEmail(email);
+      if(user.length > 0)
+      {
+        await updateDoc(doc(db, 'users', user[0].uid), {
+          uid: user[0].uid,
+          name: values.name,
+          major: values.major,
+          department: values.department,
+          startDate: values.startDate
+        });
+        console.log('Student Information updated successfully');
+    }
+    }
+  } catch (error) {
+    console.error('Error updating information:', error);
+    throw error;
+  }
+};
+
+export const updateTeacherDetail = async (values) => {
+  try {
+    const email = values.email;
+    if (email) {
+      const user = await loadUserByEmail(email);
+      if(user.length > 0)
+      {
+        await updateDoc(doc(db, 'users', user[0].uid), {
+          uid: user[0].uid,
+          name: values.name,
+          salary: values.salary,
+          jobTitle: values.jobTitle,
+          department: values.department,
+          startDate: values.startDate
+        });
+        console.log('Student Information updated successfully');
+    }
+    }
+  } catch (error) {
+    console.error('Error updating information:', error);
+    throw error;
+  }
+};
+
 
 export const updateProfileImage = async (e, currentUser) => {
   const date = new Date().getTime();
@@ -68,3 +115,4 @@ export const updateProfileImage = async (e, currentUser) => {
     throw error; // Rethrow the error to be caught by the calling code
   }
 };
+

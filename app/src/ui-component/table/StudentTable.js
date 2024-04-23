@@ -14,7 +14,7 @@ import {
   Typography,
   lighten,
 } from '@mui/material';
-
+import { updateStudentDetail } from 'hooks/updateProfileData';
 import toast, {Toaster} from 'react-hot-toast';
 
 //Icons Imports
@@ -61,12 +61,14 @@ const Table = ({data,openModal}) => {
           {
             accessorKey: 'email', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
             enableClickToCopy: true,
+            enableEditing: false,
             filterVariant: 'autocomplete',
             header: 'Email',
             size: 300,
           },
           {
             accessorKey: 'isActive', //hey a simple column for once
+            enableEditing: false,
             accessorFn: (row) => `${row.isActive? 'Active' : "Inactive"}`, //accessorFn used to join multiple data into a single cell
             header: 'Active Status',
             size: 100,
@@ -97,6 +99,7 @@ const Table = ({data,openModal}) => {
           {
             accessorKey: 'GPA',
             enableHiding: true,
+            enableEditing: false,
             // filterVariant: 'range', //if not using filter modes feature, use this instead of filterFn
             filterFn: 'between',
             header: 'GPA',
@@ -132,13 +135,24 @@ const Table = ({data,openModal}) => {
             size: 350,
           },
           {
+            accessorKey: 'department', //hey a simple column for once
+            header: 'Department',
+            size: 350,
+          },
+
+          {
             accessorFn: (row) => new Date(row.startDate), //convert to Date for sorting and filtering
             id: 'startDate',
             header: 'Start Date',
             filterVariant: 'date',
             filterFn: 'lessThan',
             sortingFn: 'datetime',
-            Cell: ({ cell }) => cell.getValue()?.toLocaleDateString(), //render Date as a string
+            muiEditTextFieldProps: {
+              type: 'date',
+              required: true,
+            },
+                
+            Cell: ({ cell }) => new Date(cell.getValue())?.toLocaleDateString(), //render Date as a string
             Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
             muiFilterTextFieldProps: {
               sx: {
@@ -155,6 +169,19 @@ const Table = ({data,openModal}) => {
   const table = useMaterialReactTable({
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    enableEditing: true,
+    editDisplayMode: 'modal', //default
+    onEditingRowSave: async({ table, values }) => {
+      //validate data
+      //save data to api
+      console.log(values)
+      await updateStudentDetail(values);
+
+      table.setEditingRow(null); //exit editing mode
+    },
+    onEditingRowCancel: () => {
+      //clear any validation errors
+    },
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,
