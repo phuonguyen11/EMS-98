@@ -18,6 +18,7 @@ import { userIcon } from 'ui-component/icons';
 //Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
 import { updateActiveStatus } from 'hooks/updateProfileData';
+import toast, {Toaster} from 'react-hot-toast';
 
 // import PropTypes from 'prop-types'
 
@@ -244,14 +245,14 @@ const Table = ({data, openModal}) => {
       const handleDeactivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
           updateActiveStatus(row.getValue('email'), false)
-          alert('deactivating ' + row.getValue('name'));
+          toast.success('Deactivating ' + row.getValue('name'));
         });
       };
 
       const handleActivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
           updateActiveStatus(row.getValue('email'), true)
-          alert('activating ' + row.getValue('name'));
+          toast.success('Activating ' + row.getValue('name'));
         });
       };
       
@@ -312,6 +313,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 const TeacherTable = ({data, openModal}) => (
   //App.tsx or AppProviders file
   <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <div><Toaster position='top-right'/></div>
     <Table data={data} openModal={openModal}/>
   </LocalizationProvider>
 );
