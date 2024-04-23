@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, signOut, updateEmail, updatePassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, updateEmail, updatePassword } from 'firebase/auth';
 
 export const signIn = (e, auth) => {
   e.preventDefault();
@@ -26,7 +26,6 @@ export const updateAuthPassword = (auth, newPassword) => {
   updatePassword(auth.currentUser, newPassword)
     .then(() => {
       console.log('password updated successfully');
-      navigate('/');
     })
     .catch((error) => {
       console.log(error);
