@@ -54,7 +54,15 @@ const utilities = {
           type: 'item',
           url: 'student/schedule',
           breadcrumbs: false
+        },
+        {
+          id: 'student-transcript',
+          title: 'Student Transcript',
+          type: 'item',
+          url: 'student/student-transcript',
+          breadcrumbs: false
         }
+
       ]
     },
     {
