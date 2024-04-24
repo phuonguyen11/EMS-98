@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -14,32 +14,29 @@ import {
   Typography,
   lighten,
 } from '@mui/material';
+//import { updateStudentDetail } from 'hooks/updateProfileData';
+import toast, {Toaster} from 'react-hot-toast';
+import { setGrade } from 'hooks/setGradeByCourse';
 
 //Icons Imports
-import { AccountCircle, Send, Settings } from '@mui/icons-material';
+import { AccountCircle, Send } from '@mui/icons-material';
 // import PropTypes from 'prop-types'
 import { userIcon } from 'ui-component/icons';
+import { updateActiveStatus } from 'hooks/updateProfileData';
+//import { setGrade } from 'hooks/setGradeByCourse';
 
-import SetGradeDialog from 'ui-component/dialog/SetGradeDialog';
-
-const Table = ({ data, openModalAddStudent }) => {
-  const [openSetGradeDialog, setOpenSetGradeDialog] = useState(false);
-
-  const handleSetGradeDialogOpen = () => setOpenSetGradeDialog(true);
-  const handleSetGradeDialogClose = () => setOpenSetGradeDialog(false);
-
-
-
+const Table = ({data,openModal,courseCode}) => {
   const columns = useMemo(
     () => [
       {
         id: 'student', //id used to define `group` column
-        header: 'Student',
+        header: 'Student' ,
         columns: [
           {
             accessorFn: (row) => `${row.name}`, //accessorFn used to join multiple data into a single cell
             id: 'name', //id is still required when using accessorFn instead of accessorKey
             header: 'Name',
+            enableEditing: false,
             size: 250,
             Cell: ({ renderedCellValue, row }) => (
               <Box
@@ -49,16 +46,16 @@ const Table = ({ data, openModalAddStudent }) => {
                   gap: '1rem',
                 }}
               >
-                <div style={{ width: '30px', height: '30px', objectFit: 'contain', borderRadius: '50%' }}>
-                  <img
-                    alt="avatar"
-                    width={'100%'}
-                    height={'100%'}
-                    src={row.original.image ? row.original.image : userIcon}
-                    loading="lazy"
-                    style={{ borderRadius: '50%' }}
-                  />
-                </div>
+              <div style={{width: '30px', height: '30px', objectFit: 'contain', borderRadius: '50%' }}>
+                <img
+                  alt="avatar"
+                  width={'100%'}
+                  height={'100%'}
+                  src={row.original.image? row.original.image : userIcon}
+                  loading="lazy"
+                  style={{borderRadius: '50%'}}
+                />
+              </div>
                 {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
                 <span>{renderedCellValue}</span>
               </Box>
@@ -67,6 +64,7 @@ const Table = ({ data, openModalAddStudent }) => {
           {
             accessorKey: 'email', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
             enableClickToCopy: true,
+            enableEditing: false,
             filterVariant: 'autocomplete',
             header: 'Email',
             size: 300,
@@ -78,21 +76,19 @@ const Table = ({ data, openModalAddStudent }) => {
         header: 'Academic Information',
         columns: [
           {
-            accessorKey: 'GPA',
+            accessorKey: 'midtermScore',
             enableHiding: true,
-            // filterVariant: 'range', //if not using filter modes feature, use this instead of filterFn
-            filterFn: 'between',
-            header: 'GPA',
+            enableEditing: true,
+            header: 'Midterm Score',
             size: 200,
-            //custom conditional format and styling
             Cell: ({ cell }) => (
               <Box
                 component="span"
                 sx={(theme) => ({
                   backgroundColor:
-                    cell.getValue() < 2.0
+                    cell.getValue() < 5.0
                       ? theme.palette.error.dark
-                      : cell.getValue() >= 2.0 && cell.getValue() < 3.0
+                      : cell.getValue() >= 5.0 && cell.getValue() < 8.0
                         ? theme.palette.warning.dark
                         : theme.palette.success.dark,
                   borderRadius: '0.25rem',
@@ -110,24 +106,72 @@ const Table = ({ data, openModalAddStudent }) => {
             ),
           },
           {
-            accessorKey: 'major', //hey a simple column for once
-            header: 'Major',
-            size: 350,
+            accessorKey: 'finalScore',
+            enableHiding: true,
+            enableEditing: true,
+            header: 'Final Score',
+            size: 200,
+            Cell: ({ cell }) => (
+              <Box
+                component="span"
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() < 5.0
+                      ? theme.palette.error.dark
+                      : cell.getValue() >= 5.0 && cell.getValue() < 8.0
+                        ? theme.palette.warning.dark
+                        : theme.palette.success.dark,
+                  borderRadius: '0.25rem',
+                  color: '#fff',
+                  maxWidth: '9ch',
+                  p: '0.25rem',
+                })}
+              >
+                {cell.getValue()?.toLocaleString?.('en-US', {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })
+                }
+              </Box>
+            ),
           },
           {
-            accessorFn: (row) => new Date(row.startDate), //convert to Date for sorting and filtering
-            id: 'startDate',
-            header: 'Start Date',
-            filterVariant: 'date',
-            filterFn: 'lessThan',
-            sortingFn: 'datetime',
-            Cell: ({ cell }) => cell.getValue()?.toLocaleDateString(), //render Date as a string
-            Header: ({ column }) => <em>{column.columnDef.header}</em>, //custom header markup
-            muiFilterTextFieldProps: {
-              sx: {
-                minWidth: '250px',
-              },
-            },
+            accessorKey: 'avergeScore',
+            enableHiding: true,
+            enableEditing: false,
+            header: 'Average Score',
+            size: 200,
+            Cell: ({ cell }) => (
+              <Box
+                component="span"
+                sx={(theme) => ({
+                  backgroundColor:
+                    cell.getValue() < 5.0
+                      ? theme.palette.error.dark
+                      : cell.getValue() >= 5.0 && cell.getValue() < 8.0
+                        ? theme.palette.warning.dark
+                        : theme.palette.success.dark,
+                  borderRadius: '0.25rem',
+                  color: '#fff',
+                  maxWidth: '9ch',
+                  p: '0.25rem',
+                })}
+              >
+                {cell.getValue()?.toLocaleString?.('en-US', {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1,
+                })
+                }
+              </Box>
+            ),
+          },
+          {
+            accessorKey: 'uid', //accessorKey used to define `data` column. `id` gets set to accessorKey automatically
+            enableClickToCopy: true,
+            enableEditing: false,
+            filterVariant: 'autocomplete',
+            header: 'Student ID',
+            size: 300,
           },
         ],
       },
@@ -138,6 +182,19 @@ const Table = ({ data, openModalAddStudent }) => {
   const table = useMaterialReactTable({
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    enableEditing: true,
+    editDisplayMode: 'modal', //default
+    onEditingRowSave: async({ table, values }) => {
+      //validate data
+      //save data to api
+      const f = parseFloat(values?.finalScore);
+      const m = parseFloat(values?.midtermScore);
+      await setGrade(m, f, values?.uid, courseCode);
+      table.setEditingRow(null); //exit editing mode
+    },
+    onEditingRowCancel: () => {
+      //clear any validation errors
+    },
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,
@@ -177,16 +234,16 @@ const Table = ({ data, openModalAddStudent }) => {
           width: '100%',
         }}
       >
-        <div style={{ width: '150px', height: '150px', objectFit: 'contain', borderRadius: '50%' }}>
-          <img
-            alt="avatar"
-            width='100%'
-            height='100%'
-            src={row.original.image ? row.original.image : userIcon}
-            loading="lazy"
-            style={{ borderRadius: '50%' }}
-          />
-        </div>
+      <div style={{width: '150px', height: '150px', objectFit: 'contain', borderRadius: '50%' }}>
+        <img
+          alt="avatar"
+          width='100%'
+          height='100%'
+          src={row.original.image?row.original.image : userIcon}
+          loading="lazy"
+          style={{ borderRadius: '50%'}}
+        />
+      </div>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="h4">Department:</Typography>
           <Typography variant="h1">
@@ -222,40 +279,22 @@ const Table = ({ data, openModalAddStudent }) => {
         </ListItemIcon>
         Send Email
       </MenuItem>,
-      <MenuItem
-        key={2}
-        onClick={() => {
-          // Send email logic...
-          closeMenu();
-          return (
-            <SetGradeDialog
-              openSetGradeDialog={handleSetGradeDialogOpen}
-              handlSetGradeDialogClose={handleSetGradeDialogClose}
-              fetchStudents={data}
-            ></SetGradeDialog>
-          )
-        }}
-        sx={{ m: 0 }}
-      >
-        <ListItemIcon>
-          <Settings />
-        </ListItemIcon>
-        Set Grade
-      </MenuItem>,
     ],
     renderTopToolbar: ({ table }) => {
-      const handleDeactivate = () => {
+      const handleDeactivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
-          alert('deactivating ' + row.getValue('name'));
+          updateActiveStatus(row.getValue('email'), false)
+          toast.success('Deactivating ' + row.getValue('name'));
         });
       };
 
-      const handleActivate = () => {
+      const handleActivate = async() => {
         table.getSelectedRowModel().flatRows.map((row) => {
-          alert('activating ' + row.getValue('name'));
+          updateActiveStatus(row.getValue('email'), true)
+          toast.success('Activating ' + row.getValue('name'));
         });
       };
-
+          
       return (
         <Box
           sx={(theme) => ({
@@ -291,7 +330,7 @@ const Table = ({ data, openModalAddStudent }) => {
               </Button>
               <Button
                 color="info"
-                onClick={openModalAddStudent}
+                onClick={openModal}
                 variant="contained"
               >
                 Add New Student Account
@@ -310,12 +349,34 @@ const Table = ({ data, openModalAddStudent }) => {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-const StudentTable = ({ data, openModalAddStudent, openSetGradeDialog }) => (
+
+const StudentTable = ({data, openModal, courseCode}) => {
   //App.tsx or AppProviders file
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <Table data={data} openModalAddStudent={openModalAddStudent} openSetGradeDialog={openSetGradeDialog}  />
-  </LocalizationProvider>
-);
+  console.log(courseCode)
+  let newData = [];
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {data.map(item => {
+
+        const m = item?.listCourses?.[courseCode]?.midterm || 0;
+        const f = item?.listCourses?.[courseCode]?.final || 0;
+        const a = (m+f)/2;
+        const uid = item?.uid;
+        const temp = {
+          ...item,
+          courseId: courseCode,
+          uid: uid,
+          midtermScore: m,
+          finalScore: f,
+          avergeScore: a,
+        }
+        newData.push(temp);
+      })}
+      <div><Toaster position='top-right'/></div>
+      <Table data={newData} openModal={openModal} courseCode={courseCode}  />
+    </LocalizationProvider>
+  )
+}
 
 export default StudentTable;
 
