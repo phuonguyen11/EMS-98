@@ -7,45 +7,35 @@ import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 import LinkIcon from '@mui/icons-material/Link';
 import { loadUserByRole } from 'hooks/loadUserByRole';
 import { CircularProgress } from '@mui/material';
-import { Button } from '@mui/material';
-import StudentTableInTeacher from 'ui-component/table/StudentTableInTeacher';
-import AddStudentDialog from 'ui-component/dialog/AddStudentDialog';
+import GradingTable from 'ui-component/table/GradingTable';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import { loadAllCourse } from 'hooks/loadAllCourse';
 
-const StudentManagementByTeacher = () => {
-    const [students, setStudents] = useState([]);
+const Grading = () => {
     const [courseCodes, setCourseCodes] = useState([]);
-    const [openAddDialog, setOpenAddDialog] = useState(false);
     const [listStudents, setListStudents] = useState([]);
     const [listCourses, setListCourses] = useState([]);
+
     const currentUserId = localStorage.getItem("userId");
-    const fetchStudents = async () => {
-        const studentList = await loadUserByRole("student");
-        if (studentList) {
-            setStudents(studentList);
-        }
-    }
+
     const fetchCourses = async () => {
         const listCourses = await loadAllCourse();
         if(listCourses) {
             setListCourses(listCourses);
         }
     }
-    useEffect(() => {
-        fetchStudents();
-        fetchCourses();
-    }, [])
+
     const getListStudent = async (currentUserId) => {
         const docRef = doc(db, 'users', currentUserId);
         const docSnap = await getDoc(docRef);
         const listStudentsData = await docSnap.data()?.listStudents;
+        const studentList = await loadUserByRole("student");
         const resultMap = {};
         Object.keys(listStudentsData || []).forEach((courseCode) => {
             const studentIds = listStudentsData[courseCode];
             studentIds.forEach((studentId) => {
-                const foundStudent = students.find((student) => student.uid === studentId);
+                const foundStudent = studentList.find((student) => student.uid === studentId);
                 if (foundStudent) {
                     if (!resultMap[courseCode]) {
                         resultMap[courseCode] = [foundStudent];
@@ -58,20 +48,14 @@ const StudentManagementByTeacher = () => {
         setListStudents(resultMap);
         setCourseCodes(Object.keys(resultMap));
     };
-    const handleAddDialogOpen = () => setOpenAddDialog(true);
-    const handleAddDialogClose = () => setOpenAddDialog(false);
-    const handleOnclickLoadStudent = async () => {
-        await getListStudent(currentUserId);
-    }
+
+    useEffect(() => {
+        getListStudent(currentUserId);
+        fetchCourses();
+    }, [])
+    
     return (
-        <MainCard title="Student Management" secondary={<SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />}>
-            <Button
-                color="info"
-                onClick={handleOnclickLoadStudent}
-                variant="contained"
-            >
-                Load Student
-            </Button>
+        <MainCard title="Grading" secondary={<SecondaryAction icon={<LinkIcon fontSize="small" />} link="https://tablericons.com/" />}>
             {courseCodes.map(item => {
                 return (
                     <>
@@ -83,20 +67,17 @@ const StudentManagementByTeacher = () => {
                             }
                         })}
                         
-                        {listStudents ? 
-                        <StudentTableInTeacher 
+                        {listStudents ?
+                        <GradingTable
                             data={listStudents[item]} 
-                            openModalAddStudent={handleAddDialogOpen}
                             courseCode={item}
                         /> : <CircularProgress />}
                         <br /><br />
                     </>
                 )
             })}
-            <AddStudentDialog openAddDialog={openAddDialog} handleAddDialogClose={handleAddDialogClose} fetchStudents={fetchStudents} />
-
         </MainCard>
     )
 };
 
-export default StudentManagementByTeacher;
+export default Grading;

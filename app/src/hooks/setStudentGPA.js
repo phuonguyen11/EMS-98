@@ -1,5 +1,5 @@
 import { updateDoc, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { db } from 'services/firebase';
 
 export const setGPA = async (studentId) => {
   //console.log(studentId, courseCode)

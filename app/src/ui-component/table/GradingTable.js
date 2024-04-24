@@ -2,30 +2,20 @@ import { useMemo } from 'react';
 import {
   MaterialReactTable,
   useMaterialReactTable,
-  MRT_GlobalFilterTextField,
-  MRT_ToggleFiltersButton,
 } from 'material-react-table';
 
 import {
   Box,
-  Button,
   ListItemIcon,
   MenuItem,
   Typography,
-  lighten,
 } from '@mui/material';
-//import { updateStudentDetail } from 'hooks/updateProfileData';
-import toast, {Toaster} from 'react-hot-toast';
 import { setGrade } from 'hooks/setGradeByCourse';
 
-//Icons Imports
 import { AccountCircle, Send } from '@mui/icons-material';
-// import PropTypes from 'prop-types'
 import { userIcon } from 'ui-component/icons';
-import { updateActiveStatus } from 'hooks/updateProfileData';
-//import { setGrade } from 'hooks/setGradeByCourse';
 
-const Table = ({data,openModal,courseCode}) => {
+const Table = ({data,courseCode}) => {
   const columns = useMemo(
     () => [
       {
@@ -67,7 +57,7 @@ const Table = ({data,openModal,courseCode}) => {
             enableEditing: false,
             filterVariant: 'autocomplete',
             header: 'Email',
-            size: 300,
+            size: 100,
           },
         ],
       },
@@ -80,7 +70,7 @@ const Table = ({data,openModal,courseCode}) => {
             enableHiding: true,
             enableEditing: true,
             header: 'Midterm Score',
-            size: 200,
+            size: 50,
             Cell: ({ cell }) => (
               <Box
                 component="span"
@@ -110,7 +100,7 @@ const Table = ({data,openModal,courseCode}) => {
             enableHiding: true,
             enableEditing: true,
             header: 'Final Score',
-            size: 200,
+            size: 50,
             Cell: ({ cell }) => (
               <Box
                 component="span"
@@ -140,7 +130,7 @@ const Table = ({data,openModal,courseCode}) => {
             enableHiding: true,
             enableEditing: false,
             header: 'Average Score',
-            size: 200,
+            size: 50,
             Cell: ({ cell }) => (
               <Box
                 component="span"
@@ -280,66 +270,6 @@ const Table = ({data,openModal,courseCode}) => {
         Send Email
       </MenuItem>,
     ],
-    renderTopToolbar: ({ table }) => {
-      const handleDeactivate = async() => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          updateActiveStatus(row.getValue('email'), false)
-          toast.success('Deactivating ' + row.getValue('name'));
-        });
-      };
-
-      const handleActivate = async() => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          updateActiveStatus(row.getValue('email'), true)
-          toast.success('Activating ' + row.getValue('name'));
-        });
-      };
-          
-      return (
-        <Box
-          sx={(theme) => ({
-            backgroundColor: lighten(theme.palette.background.default, 0.05),
-            display: 'flex',
-            gap: '0.5rem',
-            p: '8px',
-            justifyContent: 'space-between',
-          })}
-        >
-          <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            {/* import MRT sub-components */}
-            <MRT_GlobalFilterTextField table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-          </Box>
-          <Box>
-            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              <Button
-                color="error"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleDeactivate}
-                variant="contained"
-              >
-                Deactivate
-              </Button>
-              <Button
-                color="success"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleActivate}
-                variant="contained"
-              >
-                Activate
-              </Button>
-              <Button
-                color="info"
-                onClick={openModal}
-                variant="contained"
-              >
-                Add New Student Account
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      );
-    },
   });
 
   return <MaterialReactTable table={table} />;
@@ -350,9 +280,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 
-const StudentTable = ({data, openModal, courseCode}) => {
+const GradingTable = ({data, courseCode}) => {
   //App.tsx or AppProviders file
-  console.log(courseCode)
   let newData = [];
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -372,13 +301,12 @@ const StudentTable = ({data, openModal, courseCode}) => {
         }
         newData.push(temp);
       })}
-      <div><Toaster position='top-right'/></div>
-      <Table data={newData} openModal={openModal} courseCode={courseCode}  />
+      <Table data={newData} courseCode={courseCode}  />
     </LocalizationProvider>
   )
 }
 
-export default StudentTable;
+export default GradingTable;
 
 // Table.propTypes = {
 //   data: PropTypes.any,

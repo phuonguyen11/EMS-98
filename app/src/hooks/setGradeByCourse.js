@@ -1,5 +1,6 @@
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from 'services/firebase';
+import { setGPA } from './setStudentGPA';
 
 export const setGrade = async (midleScore, finalScore, studentId, courseCode) => {
   console.log(typeof m);
@@ -10,8 +11,9 @@ export const setGrade = async (midleScore, finalScore, studentId, courseCode) =>
         final: finalScore,
         average: (finalScore + midleScore) / 2.0
       }
-    });
-    window.location.reload();
+    }
+  );
+    await setGPA(studentId);
   } else {
     alert('Enter the score again');
   }

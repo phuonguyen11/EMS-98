@@ -15,7 +15,7 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
-const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/StudentManagementByTeacher')))
+const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
 
 
 // sample page routing
