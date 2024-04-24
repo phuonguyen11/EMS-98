@@ -77,7 +77,7 @@ const ProfileSection = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        navigate("pages/login/login3");
+        navigate("auth/login");
         localStorage.removeItem("userId");
         localStorage.removeItem("role");
       })

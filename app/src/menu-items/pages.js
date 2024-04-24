@@ -25,15 +25,13 @@ const pages = {
           id: 'login',
           title: 'Login',
           type: 'item',
-          url: '/pages/login/login3',
-          target: true
+          url: '/auth/login',
         },
         {
           id: 'change-password',
           title: 'Change Password',
           type: 'item',
-          url: '/pages/change-password',
-          target: true
+          url: '/auth/change-password',
         }
 
       ]

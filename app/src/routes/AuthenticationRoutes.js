@@ -16,11 +16,11 @@ const AuthenticationRoutes = {
   element: <MinimalLayout />,
   children: [
     {
-      path: '/pages/login/login3',
+      path: '/auth/login',
       element: <AuthLogin3 />
     },
     {
-      path: '/pages/change-password',
+      path: '/auth/change-password',
       element: <ChangePasswordCard />
     }
   ]
