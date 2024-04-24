@@ -15,6 +15,7 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
+const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
 
 // sample page routing
@@ -47,7 +48,7 @@ const MainRoutes = {
       children: [
         {
           path: 'student-management',
-          element: userId === null || role !== 'admin' ? <AuthLogin3 requiredRole = 'Admin' /> :<StudentManagement/>
+          element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<StudentManagement/>
         }
       ]
     },
@@ -61,12 +62,21 @@ const MainRoutes = {
       ]
     },
     {
-      path: 'student',
+      path: 'teacher',
       children: [
         {
-          path: 'student-transcript',
-          element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<StudentTranscript/>
+          path: 'grading',
+          element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<StudentManagementByTeacher/>
         }
+      ]
+     },
+     {        
+        path: 'student',
+        children: [
+          {
+            path: 'student-transcript',
+            element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<StudentTranscript/>
+          }
       ]
     },
 
