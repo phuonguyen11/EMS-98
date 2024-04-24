@@ -64,7 +64,7 @@ const FirebaseLogin = ({ ...others }) => {
             await signInWithEmailAndPassword(auth, values.email, values.password);
             setStatus({ success: true });
             // Điều hướng người dùng sau khi đăng nhập thành công
-            window.location.href = 'http://localhost:3000';
+            window.location.href = '/';
             setSubmitting(false);
             if (scriptedRef.current) {
               setStatus({ success: true });
