@@ -2,7 +2,7 @@ import { doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 export async function DeleteCourse(studentID,courseCode){
-    const studentRef =doc(db,"users",uid);
+    const studentRef =doc(db,"users",studentID);
     const studentDoc= await getDoc(studentRef);
     const student=studentDoc.data();
     const courseRef=doc(db,"courses",courseCode);
