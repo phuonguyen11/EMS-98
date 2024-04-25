@@ -46,12 +46,7 @@ export async function courseSignin(courseCode,classID,uid){
   }
   
   if (checkDuplicate(student,course,classID)&&checkDuplicateCourse(student,courseCode)) {
-      let courseSign={
-          courseCode: courseCode,
-          classID: classID
-      }
-      student.listCourses.push(courseSign);
-      
+      student.listCourses.courseCode.classID=classID;
       await updateDoc(
           studentRef, {
               listCourses: student.listCourses,
