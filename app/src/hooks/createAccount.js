@@ -10,15 +10,29 @@ export const createUser = async (output, currentUser) => {
     const role = output.role;
 
     console.log(email, password, role)
-    if (currentUser) {
+
+    if (currentUser && role=== "student") {
       await setDoc(doc(db, "users", currentUser.uid), {
         uid: currentUser.uid,
         email: email,
         password: password,
         role: role,
+        listCourses: {},
       });
       console.log("Create user successfully");
     }
+
+    if (currentUser && role=== "teacher") {
+      await setDoc(doc(db, "users", currentUser.uid), {
+        uid: currentUser.uid,
+        email: email,
+        password: password,
+        role: role,
+        listStudents:{},
+      });
+      console.log("Create user successfully");
+    }
+
   };
   
 export const createAccount = (output) => {
