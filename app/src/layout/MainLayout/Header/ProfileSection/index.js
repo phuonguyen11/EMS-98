@@ -43,7 +43,7 @@ import { auth } from '../../../../services/firebase';
 
 //utlis
 import { getGreeting } from 'utils/greetings';
-
+// import { courseSignin } from 'hooks/registerCourseByStudent';
 // ==============================|| PROFILE MENU ||============================== //
 const ProfileSection = () => {
   const theme = useTheme();
@@ -64,6 +64,8 @@ const ProfileSection = () => {
       if (currentUser) {
         const data = await loadData(currentUser);
         setUserData(data);
+        // const message = await courseSignin("CO2013", "L02",  currentUser.uid)
+        // console.log(message)
       }
     } catch (error) {
       console.error('Error fetching user data: ', error);

@@ -84,7 +84,7 @@ export const courseSignin = async(courseCode,classID,uid) => {
       };
   }
 
-  if (!checkDuplicateCourse(uid, courseCode)) 
+  if (currentSchedule.length > 0 && !checkDuplicateCourse(uid, courseCode)) 
     return { status: "error", message: "You have registered this course!" };
 
   if (currentSchedule.length > 0 && !checkDuplicate(course, classID, currentSchedule)) 
