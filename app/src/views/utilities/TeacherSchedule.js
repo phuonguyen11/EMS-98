@@ -5,7 +5,6 @@ import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 
 // assets
 import LinkIcon from '@mui/icons-material/Link';
-//import TeacherTable from 'ui-component/table/TeacherTable';
 import TeacherScheduleTable from 'ui-component/table/TeacherScheduleTable';
 import { CircularProgress } from '@mui/material';
 import { loadScheduleByTeacher } from 'hooks/loadScheduleByTeacher';
