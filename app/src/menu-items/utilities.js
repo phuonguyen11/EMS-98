@@ -61,6 +61,13 @@ const utilities = {
           type: 'item',
           url: 'student/student-transcript',
           breadcrumbs: false
+        },
+        {
+          id: 'courses-site',
+          title: 'Courses Site',
+          type: 'item',
+          url: 'student/courses-site',
+          breadcrumbs: false
         }
 
       ]
@@ -77,7 +84,15 @@ const utilities = {
           type: 'item',
           url: 'teacher/grading',
           breadcrumbs: false
+        },
+        {
+          id: 'courses-site',
+          title: 'Courses Site',
+          type: 'item',
+          url: 'teacher/courses-site',
+          breadcrumbs: false
         }
+
       ]
     },
 

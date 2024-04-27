@@ -17,6 +17,7 @@ const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentMan
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
 const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
+const CoursesSite = Loadable(lazy(() => import('views/utilities/CoursesSite')));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -67,7 +68,12 @@ const MainRoutes = {
         {
           path: 'grading',
           element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<StudentManagementByTeacher/>
+        },
+        {
+          path: 'courses-site',
+          element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<CoursesSite currentRole='teacher' uid={userId}/>
         }
+
       ]
      },
      {        
@@ -76,7 +82,12 @@ const MainRoutes = {
           {
             path: 'student-transcript',
             element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<StudentTranscript/>
+          },
+          {
+            path: 'courses-site',
+            element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<CoursesSite currentRole='student' uid={userId} />
           }
+
       ]
     },
 
@@ -85,7 +96,7 @@ const MainRoutes = {
       children: [
         {
           path: 'util-typography',
-          element: userId === null? <AuthLogin3/> :<UtilsTypography />
+          element: userId === null? <AuthLogin3/> :<CoursesSite />
         }
       ]
     },
