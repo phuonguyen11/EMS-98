@@ -56,11 +56,15 @@ const TeacherScheduleTable = ({ data }) => {
     ],
     [],
   );
+  // Sort the data initially by the 'date' column
+  const defaultSortBy = useMemo(() => [{ id: 'date', desc: true }], []);
+
   return (
     <div>
       <MaterialReactTable
         columns={columns}
         data={data}
+        initialState={defaultSortBy}
       />
     </div>
   );
