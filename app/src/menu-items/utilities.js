@@ -61,8 +61,14 @@ const utilities = {
           type: 'item',
           url: 'student/student-transcript',
           breadcrumbs: false
-        }
-
+        },
+        {
+          id: 'course-registration',
+          title: 'Course-registration',
+          type: 'item',
+          url: 'student/course-registration',
+          breadcrumbs: false
+        },
       ]
     },
     {
