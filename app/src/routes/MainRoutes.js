@@ -10,9 +10,9 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
+// const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
+// const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
+// const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
 const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
@@ -20,7 +20,7 @@ const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTra
 const CoursesSite = Loadable(lazy(() => import('views/utilities/CoursesSite')));
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+// const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 // Account Settings routing
 const AccountSettings = Loadable(lazy(() => import('views/pages/authentication/account-settings/Settings')));
@@ -91,37 +91,37 @@ const MainRoutes = {
       ]
     },
 
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-typography',
-          element: userId === null? <AuthLogin3/> :<CoursesSite />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-color',
-          element: userId === null? <AuthLogin3/> :<UtilsColor />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-shadow',
-          element: userId === null? <AuthLogin3/> :<UtilsShadow />
-        }
-      ]
-    },
-    {
-      path: 'sample-page',
-      element: userId === null? <AuthLogin3/> :<SamplePage />
-    },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-typography',
+    //       element: userId === null? <AuthLogin3/> :<CoursesSite />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-color',
+    //       element: userId === null? <AuthLogin3/> :<UtilsColor />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'utils',
+    //   children: [
+    //     {
+    //       path: 'util-shadow',
+    //       element: userId === null? <AuthLogin3/> :<UtilsShadow />
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: 'sample-page',
+    //   element: userId === null? <AuthLogin3/> :<SamplePage />
+    // },
     {
       path: 'account-settings', 
       element: userId === null ? <AuthLogin3/> : <AccountSettings /> 

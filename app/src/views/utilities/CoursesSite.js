@@ -30,7 +30,7 @@ const CoursesSite = ({currentRole, uid}) => {
     if (data && data.length) {
       return data.map(course => {
         return (
-          <Grid item xs={12} sm={6} md={4} key={course.slug}>
+          <Grid item xs={12} sm={6} md={4} key={course.courseID}>
             <Box
               sx={{
                 p: 5,
@@ -67,7 +67,7 @@ const CoursesSite = ({currentRole, uid}) => {
                 sx={{ mt: 4 }}
                 component={Link}
                 variant='outlined'
-                href='/'
+                href={`/${currentRole}/courses-site/${course.courseID}`}
               >
                 View Course content
               </Button>
