@@ -19,6 +19,8 @@ const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/G
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
 const Schedule = Loadable(lazy(() => import('views/utilities/Schedule')));
 const CourseRegistration= Loadable(lazy(() => import('views/utilities/CourseRegistration')));
+const TeacherSchedule = Loadable(lazy(() => import('views/utilities/TeacherSchedule')));
+
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
@@ -68,6 +70,15 @@ const MainRoutes = {
         {
           path: 'grading',
           element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<StudentManagementByTeacher/>
+        }
+      ]
+     },
+     {
+      path: 'teacher',
+      children: [
+        {
+          path: 'schedule',
+          element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<TeacherSchedule/>
         }
       ]
      },

@@ -83,11 +83,16 @@ const utilities = {
           type: 'item',
           url: 'teacher/grading',
           breadcrumbs: false
+        },
+        {
+          id: 'schedule',
+          title: 'Schedule',
+          type: 'item',
+          url: 'teacher/schedule',
+          breadcrumbs: false
         }
       ]
     },
-
-
     // {
     //   id: 'util-typography',
     //   title: 'Typography',
