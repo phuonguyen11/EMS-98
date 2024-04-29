@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import { FormHelperText } from "@mui/material";
 import toast, {Toaster} from "react-hot-toast";
 import { checkDuplicateTeacherSchedule, createClassForCourse } from "hooks/createCourseByAdmin";
+import { checkActiveStatus } from "hooks/createCourseByAdmin";
 
 const AddClassDialog = ({
   courses,
@@ -46,7 +47,7 @@ const AddClassDialog = ({
 
   const onAdd = async () => {
     const valid = await checkDuplicateTeacherSchedule(Number(date), Number(startTime), Number(endTime), selectedTeacher);
-    
+    const isActive = await checkActiveStatus(selectedTeacher)
     let resultOfCheck = [];
 
     if (selectedCourse === "") {
@@ -93,6 +94,13 @@ const AddClassDialog = ({
         setTeacherError("The schedule for this class conflicts with the selected teacher's current schedule. Please adjust the time or select a different teacher")
         resultOfCheck.push(!valid)
       }
+
+      if(!isActive) {
+        console.log(isActive)
+        setTeacherError("Selected teacher is not active. Please re-check")
+        resultOfCheck.push(!isActive)
+      }
+
 
       if (resultOfCheck.includes(true)) return;
 

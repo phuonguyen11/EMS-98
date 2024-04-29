@@ -41,6 +41,11 @@ export async function checkDuplicateTeacherSchedule(date,startTime,endTime,teach
     })
     return !flag.includes(false);
 }
+export async function checkActiveStatus(teacherID) {
+  const teacherRef = doc(db, 'users', teacherID);
+  const teacherDoc = await getDoc(teacherRef);
+  return teacherDoc.data().isActive;
+}
 
 export const createClassForCourse=async(courseCode, date,startTime,endTime,teacherID)=>{
 
@@ -76,17 +81,24 @@ export const createClassForCourse=async(courseCode, date,startTime,endTime,teach
   });
 
   //update listStudents of Teacher
-  const teacherRef = doc(db, 'users', teacherID);
-  const teacherDoc = await getDoc(teacherRef);
-  if (teacherDoc.exists()) {
+    const teacherRef = doc(db, 'users', teacherID);
+    const teacherDoc = await getDoc(teacherRef);
+    if (teacherDoc.exists()) {
+      const isActive = teacherDoc.data().isActive;
+      if(!isActive)
+      {
+        return {status: "Error", message: "Teacher is not active!"};
+      }
+    }
+
     const listStudents = teacherDoc.data().listStudents || {};
     const updatedListStudents = { ...listStudents };
     updatedListStudents[course.courseCode] = [];
     
+  
     await updateDoc(doc(db, 'users', teacherID), {
       listStudents: updatedListStudents
     });
-  }
 
 
   return {status: "success", message: `Create class for ${courseCode} successfully!`};
