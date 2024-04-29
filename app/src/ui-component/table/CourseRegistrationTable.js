@@ -177,7 +177,7 @@ const Table = ({ data, studentID }) => {
                                 onClick={handleCourseSignOut}
                                 variant="contained"
                             >
-                                Course Sign Out
+                                Unenroll
                             </Button>
                             <Button
                                 color="success"
@@ -185,7 +185,7 @@ const Table = ({ data, studentID }) => {
                                 onClick={handleCourseSignIn}
                                 variant="contained"
                             >
-                                Course Sign In
+                                Enroll
                             </Button>
                         </Box>
                     </Box>

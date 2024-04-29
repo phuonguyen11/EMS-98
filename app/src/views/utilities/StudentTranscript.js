@@ -6,16 +6,16 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'services/firebase';
 import { loadData } from 'hooks/loadUserData';
 import { auth } from 'services/firebase';
-
+import { setGPA } from 'hooks/setStudentGPA';
 const StudentTranscript = () => {
   const [courses, setCourses] = useState([]);
-  const [gpa, setGpa] = useState(null);
+  const [currentGPA, setCurrentGPA] = useState(null);
   const fetchUserData = async () => {
     try {
       const currentUser = auth.currentUser;
       if (currentUser) {
         const data = await loadData(currentUser);
-        setGpa(data.GPA);
+        await setGPA(currentUser.uid)
         const listCourses = data.listCourses || {};
         const promises = Object.keys(listCourses).map(async (courseCode) => {
           const docRefCourse = doc(db, 'courses', courseCode);
@@ -30,6 +30,7 @@ const StudentTranscript = () => {
         });
         const coursesWithDetails = await Promise.all(promises);
         setCourses(coursesWithDetails);
+        setCurrentGPA(data.GPA);
       }
     } catch (error) {
       console.error('Error fetching user data: ', error);
@@ -40,12 +41,11 @@ const StudentTranscript = () => {
     fetchUserData();
   }, []);
   console.log(courses);
-  console.log(gpa);
   return (
     <MainCard
       title="Student Transcript"
     >
-      {courses ? <TranscriptTable data={courses} gpa={gpa}/> : <CircularProgress />}
+      {courses ? <TranscriptTable data={courses} gpa={currentGPA}/> : <CircularProgress />}
     </MainCard>
   );
 };
