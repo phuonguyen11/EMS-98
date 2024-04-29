@@ -96,8 +96,8 @@ const AddClassDialog = ({
 
       if (resultOfCheck.includes(true)) return;
 
-    const result = await createClassForCourse(selectedCourse, date, startTime, endTime, selectedTeacher);
-    toast.success(result.message);
+      const result = await createClassForCourse(selectedCourse, Number(date), Number(startTime), Number(endTime), selectedTeacher);
+      toast.success(result.message);
     
     fetchCourses();
     onClose();
