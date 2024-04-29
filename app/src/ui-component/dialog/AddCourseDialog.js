@@ -12,6 +12,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContentText from "@mui/material/DialogContentText";
 import { FormHelperText } from "@mui/material";
+import { createCourse } from "hooks/createCourseByAdmin";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 const AddCourseDialog = ({
   openAddDialog,
@@ -69,9 +72,10 @@ const AddCourseDialog = ({
       courseName: courseName,
       credit: credit,
     };
-    // await createAccount(output);
+    const result = await createCourse(output);
+    if(result.status === "Success") toast.success(result.message)
+    else toast.error(result.message)
     onClose();
-    fetchCourses();
 
   };
 
@@ -91,6 +95,7 @@ const AddCourseDialog = ({
 
   return (
     <>
+        <div><Toaster position="top-right"/></div>
       <Dialog
         open={openAddDialog}
         onClose={onClose}

@@ -47,10 +47,19 @@ const CourseManagement = () => {
     fetchCourses();
     fetchTeachers();
   }, []);
-const handleAddCourseDialogOpen = () => setOpenAddCourseDialog(true);
+
+const handleAddCourseDialogOpen = () => {
+    setOpenAddCourseDialog(true);
+    fetchCourses();
+}
+
 const handleAddCourseDialogClose = () => setOpenAddCourseDialog(false);
 
-const handleAddClassDialogOpen = () => setOpenAddClassDialog(true);
+const handleAddClassDialogOpen = () => {
+    setOpenAddClassDialog(true);
+    fetchCourses();
+    fetchTeachers();
+}
 const handleAddClassDialogClose = () => setOpenAddClassDialog(false);
 
  

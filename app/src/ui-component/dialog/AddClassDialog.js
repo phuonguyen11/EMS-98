@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // ** MUI Imports
 import Grid from "@mui/material/Grid";
@@ -15,6 +15,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContentText from "@mui/material/DialogContentText";
 import TextField from "@mui/material/TextField";
 import { FormHelperText } from "@mui/material";
+import toast, {Toaster} from "react-hot-toast";
+import { checkDuplicateTeacherSchedule, createClassForCourse } from "hooks/createCourseByAdmin";
 
 const AddClassDialog = ({
   courses,
@@ -31,9 +33,6 @@ const AddClassDialog = ({
   const [selectedTeacher, setSelectedTeacher] = useState("");
   const [teacherError, setTeacherError] = useState("");
 
-  const [classID, setClassID] = useState("");
-  const [classIdError, setClassIdError] = useState("");
-
   const [date, setDate] = useState("");
   const [dateError, setDateError] = useState("");
 
@@ -45,12 +44,9 @@ const AddClassDialog = ({
 
   const hasNumber = (text) => new RegExp(/^[0-9]+$/).test(text);
 
-  const isSameClassID = (selectedCourse, classID) => {
-    const recentClassIds = courses.filter(item => item.courseCode === selectedCourse)[0]?.classArray.find((item) => item.classID === classID)
-    return recentClassIds !== undefined
-  }
-
   const onAdd = async () => {
+    const valid = await checkDuplicateTeacherSchedule(Number(date), Number(startTime), Number(endTime), selectedTeacher);
+    
     let resultOfCheck = [];
 
     if (selectedCourse === "") {
@@ -60,10 +56,6 @@ const AddClassDialog = ({
       if (selectedTeacher === "") {
         setTeacherError("This field cannot be empty");
         resultOfCheck.push(selectedTeacher === "")
-      }
-      if (classID === "") {
-        setClassIdError("This field cannot be empty");
-        resultOfCheck.push(classID === "")
       }
 
       if (date === "") {
@@ -96,19 +88,24 @@ const AddClassDialog = ({
         resultOfCheck.push(!hasNumber(endTime))
       }
 
-      if(isSameClassID(selectedCourse, classID)) {
-        setClassIdError("This class has already been created. Please fill another class ID");
-        resultOfCheck.push(isSameClassID(selectedCourse, classID))
+      if(!valid) {
+        console.log(valid)
+        setTeacherError("The schedule for this class conflicts with the selected teacher's current schedule. Please adjust the time or select a different teacher")
+        resultOfCheck.push(!valid)
       }
 
       if (resultOfCheck.includes(true)) return;
+
+    const result = await createClassForCourse(selectedCourse, date, startTime, endTime, selectedTeacher);
+    toast.success(result.message);
+    
+    fetchCourses();
     onClose();
   };
 
   const clearError = () => {
     setCourseCodeError("");
     setTeacherError("");
-    setClassIdError("");
     setDateError("");
     setStartTimeError("");
     setEndTimeError("");
@@ -127,6 +124,7 @@ const AddClassDialog = ({
 
   return (
     <>
+    <div><Toaster position="top-right"/></div>
       <Dialog
         open={openClassDialog}
         onClose={onClose}
@@ -195,21 +193,6 @@ const AddClassDialog = ({
                   </FormControl>
                 </Grid>
               )}
-
-                <Grid item xs={12} sm={6}>
-                <FormControl error={classIdError !== ""} fullWidth>
-                    <TextField
-                        error={classIdError !== ""}
-                        label='Class ID'
-                        value={classID}
-                        onChange={e => {
-                        setClassID(e.target.value);
-                        setClassIdError("");
-                        }}
-                    />
-                    <FormHelperText id='component-error-text'>{classIdError}</FormHelperText>
-                    </FormControl>
-                </Grid>
 
                 <Grid item xs={12} sm={6}>
                 <FormControl error={dateError !== ""} fullWidth>
