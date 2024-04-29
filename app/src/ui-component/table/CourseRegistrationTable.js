@@ -12,7 +12,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'services/firebase';
 
-const Table = ({ data, studentID }) => {
+const Table = ({ data, studentID, currentRole, openCourseModal, openClassModal }) => {
     const [newData, setNewData] = useState([]);
 
     useEffect(() => {
@@ -170,8 +170,8 @@ const Table = ({ data, studentID }) => {
                         <MRT_ToggleFiltersButton table={table} />
                     </Box>
                     <Box>
-                        <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-                            <Button
+                        {currentRole === 'student' && <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                             <Button
                                 color="error"
                                 disabled={!table.getIsSomeRowsSelected()}
                                 onClick={handleCourseSignOut}
@@ -187,7 +187,26 @@ const Table = ({ data, studentID }) => {
                             >
                                 Enroll
                             </Button>
+                        </Box>}
+                        {currentRole === 'admin' && <Box sx={{display: 'flex', gap: '0.5rem'}}>
+                        <Button
+                            color="primary"
+                            onClick={openCourseModal}
+                            variant="contained"
+                        >
+                            Add New Course
+                        </Button>
+                        <Button
+                            color="inherit"
+                            onClick={openClassModal}
+                            variant="contained"
+                        >
+                            Add New Class
+                        </Button>
+
                         </Box>
+                            
+                        }
                     </Box>
                 </Box>
             );

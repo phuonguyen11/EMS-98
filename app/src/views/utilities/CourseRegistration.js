@@ -24,7 +24,7 @@ const CourseRegistration = () => {
         <MainCard
             title="CourseRegistration"
         >
-            {allCourse ? <CourseRegistrationTable data={allCourse} studentID={studentID} /> : <CircularProgress />}
+            {allCourse ? <CourseRegistrationTable data={allCourse} studentID={studentID} currentRole="student" /> : <CircularProgress />}
         </MainCard>
     );
 };
