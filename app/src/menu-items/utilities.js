@@ -38,10 +38,17 @@ const utilities = {
           type: 'item',
           url: 'admin/teacher-management',
           breadcrumbs: false
+        },
+        {
+          id: 'course-management',
+          title: 'Course Management',
+          type: 'item',
+          url: 'admin/course-management',
+          breadcrumbs: false
         }
+
       ]
     },
-
     {
       id: 'student',
       title: 'iStudent',

@@ -15,11 +15,13 @@ const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
 const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
+const CourseManagement = Loadable(lazy(() => import('views/utilities/CourseManagement')));
 const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
 const Schedule = Loadable(lazy(() => import('views/utilities/Schedule')));
 const CourseRegistration= Loadable(lazy(() => import('views/utilities/CourseRegistration')));
 const TeacherSchedule = Loadable(lazy(() => import('views/utilities/TeacherSchedule')));
+
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -61,6 +63,15 @@ const MainRoutes = {
         {
           path: 'teacher-management',
           element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<TeacherManagement/>
+        }
+      ]
+    },
+    {
+      path: 'admin',
+      children: [
+        {
+          path: 'course-management',
+          element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<CourseManagement/>
         }
       ]
     },
