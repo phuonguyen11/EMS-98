@@ -15,9 +15,10 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 // const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
-const StudentManagementByTeacher = Loadable(lazy( ()=> import('views/utilities/Grading')))
+const StudentManagementByTeacher = Loadable(lazy(() => import('views/utilities/Grading')));
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
 const CoursesSite = Loadable(lazy(() => import('views/utilities/CoursesSite')));
+const CourseDetail = Loadable(lazy(() => import('views/utilities/CourseDetail')));
 
 // sample page routing
 // const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -25,22 +26,22 @@ const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authen
 // Account Settings routing
 const AccountSettings = Loadable(lazy(() => import('views/pages/authentication/account-settings/Settings')));
 // ==============================|| MAIN ROUTING ||============================== //
-const userId = localStorage.getItem("userId");
-const role = localStorage.getItem("role")
+const userId = localStorage.getItem('userId');
+const role = localStorage.getItem('role');
 const MainRoutes = {
   path: '/',
-  element: userId === null? <MinimalLayout/> : <MainLayout />,
+  element: userId === null ? <MinimalLayout /> : <MainLayout />,
   children: [
     {
       path: '/',
-      element: userId === null? <AuthLogin3/> : <DashboardDefault />,
+      element: userId === null ? <AuthLogin3 /> : <DashboardDefault />
     },
     {
       path: 'dashboard',
       children: [
         {
           path: 'default',
-          element: userId === null? <AuthLogin3/> :<DashboardDefault />
+          element: userId === null ? <AuthLogin3 /> : <DashboardDefault />
         }
       ]
     },
@@ -49,7 +50,7 @@ const MainRoutes = {
       children: [
         {
           path: 'student-management',
-          element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<StudentManagement/>
+          element: userId === null || role !== 'admin' ? <AuthLogin3 requiredRole="Admin" /> : <StudentManagement />
         }
       ]
     },
@@ -58,7 +59,7 @@ const MainRoutes = {
       children: [
         {
           path: 'teacher-management',
-          element: userId === null || role !== 'admin'? <AuthLogin3 requiredRole = 'Admin' /> :<TeacherManagement/>
+          element: userId === null || role !== 'admin' ? <AuthLogin3 requiredRole="Admin" /> : <TeacherManagement />
         }
       ]
     },
@@ -67,64 +68,44 @@ const MainRoutes = {
       children: [
         {
           path: 'grading',
-          element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<StudentManagementByTeacher/>
+          element: userId === null || role !== 'teacher' ? <AuthLogin3 requiredRole="Teacher" /> : <StudentManagementByTeacher />
         },
         {
           path: 'courses-site',
-          element: userId === null || role !== 'teacher'? <AuthLogin3 requiredRole = 'Teacher' /> :<CoursesSite currentRole='teacher' uid={userId}/>
+          element:
+            userId === null || role !== 'teacher' ? (
+              <AuthLogin3 requiredRole="Teacher" />
+            ) : (
+              <CoursesSite currentRole="teacher" uid={userId} />
+            )
         }
-
-      ]
-     },
-     {        
-        path: 'student',
-        children: [
-          {
-            path: 'student-transcript',
-            element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<StudentTranscript/>
-          },
-          {
-            path: 'courses-site',
-            element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole = 'Student' /> :<CoursesSite currentRole='student' uid={userId} />
-          }
-
       ]
     },
-
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-typography',
-    //       element: userId === null? <AuthLogin3/> :<CoursesSite />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-color',
-    //       element: userId === null? <AuthLogin3/> :<UtilsColor />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-shadow',
-    //       element: userId === null? <AuthLogin3/> :<UtilsShadow />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'sample-page',
-    //   element: userId === null? <AuthLogin3/> :<SamplePage />
-    // },
     {
-      path: 'account-settings', 
-      element: userId === null ? <AuthLogin3/> : <AccountSettings /> 
+      path: 'student',
+      children: [
+        {
+          path: 'student-transcript',
+          element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole="Student" /> : <StudentTranscript />
+        },
+        {
+          path: 'courses-site',
+          element:
+            userId === null || role !== 'student' ? (
+              <AuthLogin3 requiredRole="Student" />
+            ) : (
+              <CoursesSite currentRole="student" uid={userId} />
+            )
+        },
+        {
+          path: 'courses-site/:courseCode',
+          element: <CourseDetail />
+        }
+      ]
+    },
+    {
+      path: 'account-settings',
+      element: userId === null ? <AuthLogin3 /> : <AccountSettings />
     }
   ]
 };
