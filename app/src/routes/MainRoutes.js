@@ -78,6 +78,10 @@ const MainRoutes = {
             ) : (
               <CoursesSite currentRole="teacher" uid={userId} />
             )
+        },
+        {
+          path: 'courses-site/:courseCode',
+          element: <CourseDetail />
         }
       ]
     },

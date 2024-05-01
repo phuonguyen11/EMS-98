@@ -39,7 +39,7 @@ const CourseDetail = () => {
   };
   const getClass = async () => {
     if (!courseCode) return;
-    const myClass = await getClassFromUser(courseCode);
+    const myClass = await getClassFromUser(courseCode, role);
     console.log('myClass', myClass);
     setStudentClass(myClass);
   };
@@ -132,18 +132,22 @@ const CourseDetail = () => {
           {studentClass && (
             <>
               <div>
-                <strong>Schedule:</strong>
+                <strong>Class : </strong>
+                <span>{studentClass.classID}</span>
+              </div>
+              <div>
+                <strong>Schedule :</strong>
                 <span>
                   {' '}
                   Thứ {studentClass.date}, Tiết {studentClass.startTime} - {studentClass.endTime}
                 </span>
               </div>
               <div>
-                <strong>Teacher: </strong>
+                <strong>Teacher : </strong>
                 <span>{studentClass.teacherName}</span>
               </div>
               <div>
-                <strong>Registered Students:</strong>
+                <strong>Registered Students :</strong>
                 {studentClass.student.map((person) => (
                   <div key={`student-item-${person.name}`}>
                     <img src={person.image} alt="" style={{ width: 200 }} />
@@ -156,30 +160,6 @@ const CourseDetail = () => {
               </div>
             </>
           )}
-
-          {/* Display registered students */}
-          <div>
-            <strong>Registered Students:</strong>
-
-            {course?.studentRegister?.map((it) => (
-              <div key={`student-item-${it.uid}`}>
-                <img src={it.image} alt="" style={{ width: 200 }} />
-
-                <div>
-                  <p style={{ margin: 0 }}>{it?.name}</p>
-                  <p style={{ margin: 0 }}>{it?.email}</p>
-
-                  {/* Display GPA and major if teacher role */}
-                  {isTeacher && (
-                    <>
-                      <p style={{ margin: 0 }}>GPA: {it?.GPA?.toFixed(2)}</p>
-                      <p style={{ margin: 0 }}>Major: {it?.major}</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
 
           {/* Display course documents */}
           {course?.courseDocuments && (
@@ -220,7 +200,7 @@ const CourseDetail = () => {
             </div>
           )}
         </div>
-        {/* <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} /> */}
+        <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} />
       </Box>
     </MainCard>
   );
