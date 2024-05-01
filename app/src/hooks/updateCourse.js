@@ -8,6 +8,7 @@ export const ECourseDocumentType = {
 // Update course document in the database
 export const updateCourseDocument = async (courseCode, documentData) => {
   const courseRef = doc(db, 'courses', courseCode);
+  console.log(documentData);
   await updateDoc(courseRef, {
     courseDocuments: arrayUnion(documentData)
   });

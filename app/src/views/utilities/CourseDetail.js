@@ -7,6 +7,7 @@ import { getCourse } from 'hooks/getCourse';
 import { ECourseDocumentType, removeCourseDocument, updateDocument } from '../../hooks/updateCourse';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import getClassFromUser from 'hooks/getClassFromUser';
+import UploadButton from 'ui-component/button/UploadButton';
 const CourseDetail = () => {
   const role = localStorage.getItem('role');
   const isTeacher = role === 'teacher';
@@ -201,6 +202,7 @@ const CourseDetail = () => {
           )}
         </div>
         <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} />
+        <UploadButton course_code={courseCode} />
       </Box>
     </MainCard>
   );

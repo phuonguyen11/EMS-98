@@ -11,10 +11,10 @@ const getClassFromUser = async (courseCode, role) => {
     let docSnap = await getDoc(docRef);
     const allCourse = docSnap.data().listCourses;
     if (allCourse) {
-      console.log(allCourse);
+      // console.log(allCourse);
       for (const i of Object.entries(allCourse)) {
         if (i[0] === courseCode) {
-          console.log(i);
+          // console.log(i);
           studentClass = i[1].classID;
           break;
         }
@@ -28,7 +28,7 @@ const getClassFromUser = async (courseCode, role) => {
     if (classArray) {
       for (const i of Object.entries(classArray)) {
         if (i[1].classID === studentClass) {
-          console.log(i[1]);
+          // console.log(i[1]);
           store = i[1];
           teacherId = i[1].teacherID;
         }
@@ -45,16 +45,16 @@ const getClassFromUser = async (courseCode, role) => {
         break;
       }
     }
-    console.log(listStudentsId);
+    // console.log(listStudentsId);
     const studentList = [];
     for (const i of listStudentsId[0]) {
-      console.log('id: ', i);
+      // console.log('id: ', i);
       const student = await loadUserById(i);
-      console.log(student.name);
+      // console.log(student.name);
       studentList.push(student);
     }
     store['student'] = studentList;
-    console.log('name: ', teacher);
+    // console.log('name: ', teacher);
     store['teacherName'] = teacher;
     return store;
   } else if (role === 'teacher') {
@@ -66,7 +66,7 @@ const getClassFromUser = async (courseCode, role) => {
     if (classArray) {
       for (const i of Object.entries(classArray)) {
         if (i[1].teacherID === userId) {
-          console.log(i[1]);
+          // console.log(i[1]);
           store = i[1];
         }
       }
@@ -83,12 +83,12 @@ const getClassFromUser = async (courseCode, role) => {
         break;
       }
     }
-    console.log(listStudentsId);
+    // console.log(listStudentsId);
     const studentList = [];
     for (const i of listStudentsId[0]) {
-      console.log('id: ', i);
+      // console.log('id: ', i);
       const student = await loadUserById(i);
-      console.log(student.name);
+      // console.log(student.name);
       studentList.push(student);
     }
     store['student'] = studentList;
