@@ -8,7 +8,7 @@ export const updateProfileInformation = async (e, currentUser) => {
   const name = target.name.value;
   const phone = target.phone.value;
   const identitycard = target.identitycard.value;
-  const address= target.address.value;
+  const address = target.address.value;
   try {
     if (currentUser) {
       await updateDoc(doc(db, 'users', currentUser.uid), {
@@ -32,14 +32,13 @@ export const updateActiveStatus = async (email, activeStatus) => {
     if (email) {
       const user = await loadUserByEmail(email);
       const isActive = activeStatus;
-      if(user.length > 0)
-      {
+      if (user.length > 0) {
         await updateDoc(doc(db, 'users', user[0].uid), {
           uid: user[0].uid,
           isActive
         });
         console.log('Status updated successfully');
-    }
+      }
     }
   } catch (error) {
     console.error('Error updating status:', error);
@@ -52,8 +51,7 @@ export const updateStudentDetail = async (values) => {
     const email = values.email;
     if (email) {
       const user = await loadUserByEmail(email);
-      if(user.length > 0)
-      {
+      if (user.length > 0) {
         await updateDoc(doc(db, 'users', user[0].uid), {
           uid: user[0].uid,
           name: values.name,
@@ -62,7 +60,7 @@ export const updateStudentDetail = async (values) => {
           startDate: values.startDate
         });
         console.log('Student Information updated successfully');
-    }
+      }
     }
   } catch (error) {
     console.error('Error updating information:', error);
@@ -75,8 +73,7 @@ export const updateTeacherDetail = async (values) => {
     const email = values.email;
     if (email) {
       const user = await loadUserByEmail(email);
-      if(user.length > 0)
-      {
+      if (user.length > 0) {
         await updateDoc(doc(db, 'users', user[0].uid), {
           uid: user[0].uid,
           name: values.name,
@@ -86,14 +83,13 @@ export const updateTeacherDetail = async (values) => {
           startDate: values.startDate
         });
         console.log('Student Information updated successfully');
-    }
+      }
     }
   } catch (error) {
     console.error('Error updating information:', error);
     throw error;
   }
 };
-
 
 export const updateProfileImage = async (e, currentUser) => {
   const date = new Date().getTime();
@@ -115,4 +111,3 @@ export const updateProfileImage = async (e, currentUser) => {
     throw error; // Rethrow the error to be caught by the calling code
   }
 };
-
