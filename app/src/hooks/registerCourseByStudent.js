@@ -91,31 +91,31 @@ export const deleteCourse = async (course, teacherId, student) => {
 };
 
 export const courseSignin = async(courseCode,classID,uid) => {
+
+  const currentSchedule = await loadScheduleByStudent(uid);
+  if (currentSchedule.length > 0 && !checkDuplicateCourse(courseCode, currentSchedule))
+  return { status: "error", message: "You have registered this course!" };
   
   const studentRef =doc(db,"users",uid);
   const studentDoc= await getDoc(studentRef);
   const student=studentDoc.data();
+
+  if(!student?.isActive) {
+    return {
+      status: "error",
+      message: "student is not active!"
+    };
+}
+
+
   const courseRef=doc(db,"courses",courseCode);
   const courseDoc= await getDoc(courseRef);
   const course=courseDoc.data();
 
-  const currentSchedule = await loadScheduleByStudent(uid);
-  const courseInfo = course.classArray.filter((item) => item.classID === classID)[0]
-
-  if(!student?.isActive) {
-      return {
-        status: "error",
-        message: "student is not active!"
-      };
-  }
-
-  if (currentSchedule.length > 0 && !checkDuplicateCourse(courseCode, currentSchedule))
-    return { status: "error", message: "You have registered this course!" };
-
   if (currentSchedule.length > 0 && !checkDuplicate(course, classID, currentSchedule)) 
-    return { status: "error", message: "Time overlapped!" };
+  return { status: "error", message: "Time overlapped!" };
 
-  console.log(courseCode, courseInfo.teacherID, uid);
+  const courseInfo = course.classArray.filter((item) => item.classID === classID)[0]
 
   try {
     await registerCourse(course, courseInfo.teacherID, student);
@@ -126,28 +126,43 @@ export const courseSignin = async(courseCode,classID,uid) => {
 }
 
 export const courseSignOut = async(courseCode,classID,uid) => {
-  
+  const currentSchedule = await loadScheduleByStudent(uid);
+
+  if (currentSchedule.length === 0) {
+    return {status: "error", message: "Your schedule is blank!"};
+  }
+  if (checkDuplicateCourse(courseCode, currentSchedule)) 
+    return { status: "error", message: "You have not registered this course yet!" };
+
+
+  const classOfCourse = currentSchedule.filter(item => item.courseID === courseCode)[0]
+  console.log(classOfCourse)
+  if (classOfCourse.classID !== classID) {
+    return { status: "error", message: "You have not registered this class. Please double-check with your schedule!" };
+  }
+
   const studentRef =doc(db,"users",uid);
   const studentDoc= await getDoc(studentRef);
   const student=studentDoc.data();
+
+  if(student.listCourses[courseCode].average !== 0) {
+    return { status: "error", message: "This course already had average score. You cannot signout!" };
+  }
+
+  if(!student?.isActive) {
+    return {
+      status: "error",
+      message: "student is not active!"
+    };
+}
+
+
   const courseRef=doc(db,"courses",courseCode);
   const courseDoc= await getDoc(courseRef);
   const course=courseDoc.data();
 
-  const currentSchedule = await loadScheduleByStudent(uid);
   const courseInfo = course.classArray.filter((item) => item.classID === classID)[0]
 
-  if(!student?.isActive) {
-      return {
-        status: "error",
-        message: "student is not active!"
-      };
-  }
-  if (currentSchedule.length === 0) {
-    return {status: "error", message: "Your schedule is blank!"};
-  }
-  if (currentSchedule.length > 0 && checkDuplicateCourse(courseCode, currentSchedule)) 
-    return { status: "error", message: "You have not registered this course yet!" };
   try {
     await deleteCourse(course, courseInfo.teacherID, student);
     return { status: "success", message: "Delete Successfully!" };

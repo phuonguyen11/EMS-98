@@ -10,18 +10,18 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
-// const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-// const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-// const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const StudentManagement = Loadable(lazy(() => import('views/utilities/StudentManagement')));
 const TeacherManagement = Loadable(lazy(() => import('views/utilities/TeacherManagement')));
+const CourseManagement = Loadable(lazy(() => import('views/utilities/CourseManagement')));
 const StudentManagementByTeacher = Loadable(lazy(() => import('views/utilities/Grading')));
 const StudentTranscript = Loadable(lazy(() => import('views/utilities/StudentTranscript')));
+const Schedule = Loadable(lazy(() => import('views/utilities/Schedule')));
+const CourseRegistration = Loadable(lazy(() => import('views/utilities/CourseRegistration')));
+const TeacherSchedule = Loadable(lazy(() => import('views/utilities/TeacherSchedule')));
 const CoursesSite = Loadable(lazy(() => import('views/utilities/CoursesSite')));
 const CourseDetail = Loadable(lazy(() => import('views/utilities/CourseDetail')));
 
 // sample page routing
-// const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 // Account Settings routing
 const AccountSettings = Loadable(lazy(() => import('views/pages/authentication/account-settings/Settings')));
@@ -64,6 +64,15 @@ const MainRoutes = {
       ]
     },
     {
+      path: 'admin',
+      children: [
+        {
+          path: 'course-management',
+          element: userId === null || role !== 'admin' ? <AuthLogin3 requiredRole="Admin" /> : <CourseManagement />
+        }
+      ]
+    },
+    {
       path: 'teacher',
       children: [
         {
@@ -78,6 +87,10 @@ const MainRoutes = {
             ) : (
               <CoursesSite currentRole="teacher" uid={userId} />
             )
+        },
+        {
+          path: 'schedule',
+          element: userId === null || role !== 'teacher' ? <AuthLogin3 requiredRole="Teacher" /> : <TeacherSchedule />
         },
         {
           path: 'courses-site/:courseCode',
@@ -104,6 +117,10 @@ const MainRoutes = {
         {
           path: 'courses-site/:courseCode',
           element: <CourseDetail />
+        },
+        {
+          path: 'schedule',
+          element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole="Student" /> : <Schedule />
         }
       ]
     },

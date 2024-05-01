@@ -1,5 +1,13 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill, IconBrandSuperhuman, IconNotebook, IconUserShield } from '@tabler/icons-react';
+import {
+  IconTypography,
+  IconPalette,
+  IconShadow,
+  IconWindmill,
+  IconBrandSuperhuman,
+  IconNotebook,
+  IconUserShield
+} from '@tabler/icons-react';
 
 // constant
 const icons = {
@@ -38,10 +46,16 @@ const utilities = {
           type: 'item',
           url: 'admin/teacher-management',
           breadcrumbs: false
+        },
+        {
+          id: 'course-management',
+          title: 'Course Management',
+          type: 'item',
+          url: 'admin/course-management',
+          breadcrumbs: false
         }
       ]
     },
-
     {
       id: 'student',
       title: 'iStudent',
@@ -68,8 +82,14 @@ const utilities = {
           type: 'item',
           url: 'student/courses-site',
           breadcrumbs: false
+        },
+        {
+          id: 'course-registration',
+          title: 'Course-registration',
+          type: 'item',
+          url: 'student/course-registration',
+          breadcrumbs: false
         }
-
       ]
     },
     {
@@ -89,14 +109,17 @@ const utilities = {
           id: 'courses-site',
           title: 'Courses Site',
           type: 'item',
-          url: 'teacher/courses-site',
+          url: 'teacher/courses-site'
+        },
+        {
+          id: 'schedule',
+          title: 'Schedule',
+          type: 'item',
+          url: 'teacher/schedule',
           breadcrumbs: false
         }
-
       ]
-    },
-
-
+    }
     // {
     //   id: 'util-typography',
     //   title: 'Typography',
