@@ -121,6 +121,10 @@ const MainRoutes = {
         {
           path: 'schedule',
           element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole="Student" /> : <Schedule />
+        },
+        {
+          path: 'course-registration',
+          element: userId === null || role !== 'student' ? <AuthLogin3 requiredRole="Student" /> : <CourseRegistration />
         }
       ]
     },
