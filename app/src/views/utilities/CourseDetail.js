@@ -145,7 +145,6 @@ const CourseDetail = () => {
             py: 4.5,
             bgcolor,
             color: dark ? 'grey.800' : '#ffffff',
-            whiteSpace: 'nowrap'
           }}
         >
           {title && (
