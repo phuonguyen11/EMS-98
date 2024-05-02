@@ -21,6 +21,7 @@ export const loadUserById = async (userId) => {
   const docSnap = await getDoc(docRef);
   return {
     name: docSnap.data().name,
-    image: docSnap.data().image
+    image: docSnap.data().image,
+    email: docSnap.data().email,
   };
 };
