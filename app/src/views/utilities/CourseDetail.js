@@ -1,5 +1,3 @@
-import MainCard from 'ui-component/cards/MainCard';
-import { Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect, useRef } from 'react';
@@ -8,9 +6,20 @@ import { ECourseDocumentType, removeCourseDocument, updateDocument } from '../..
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import getClassFromUser from 'hooks/getClassFromUser';
 import UploadButton from 'ui-component/button/UploadButton';
+import { Box, Card, Grid, Typography, Button } from '@mui/material';
+import toast, {Toaster} from 'react-hot-toast';
+import StudentList from 'ui-component/dialog/ViewStudentList';
+
+// project imports
+import SubCard from 'ui-component/cards/SubCard';
+import MainCard from 'ui-component/cards/MainCard';
+import { gridSpacing } from 'store/constant';
+
 const CourseDetail = () => {
   const role = localStorage.getItem('role');
   const isTeacher = role === 'teacher';
+  const videoRef = useRef();
+
 
   // Lấy course code từ URL parameters
   const params = useParams();
@@ -21,6 +30,8 @@ const CourseDetail = () => {
   const [documentSelected, setDocumentSelected] = useState();
   const [isUploading, setIsUploading] = useState(false);
   const [studentClass, setStudentClass] = useState(null);
+  const [open, setOpen] = useState(false);
+
 
   // Tham chiếu đến input file cho document upload
   const inputFileRef = useRef(null);
@@ -107,7 +118,7 @@ const CourseDetail = () => {
 
       // Cập nhật document trong database
       await updateDocument(course.courseCode, documentData);
-      alert('Update document successfully');
+      toast.success('Update document successfully');
       handleGetCourse();
     } catch (error) {
       console.log(error);
@@ -116,94 +127,151 @@ const CourseDetail = () => {
       inputFileRef.current && (inputFileRef.current.value = '');
     }
   };
-  return (
-    <MainCard title={courseCode}>
-      <Box sx={{ p: 2, border: '1px dashed grey' }}>
-        <div>
-          <div>
-            <strong>Course Name:</strong>
-            <span>{course?.courseName}</span>
-          </div>
 
-          <div>
-            <strong>Credit:</strong>
-            <span>{course?.credit}</span>
-          </div>
-
-          {studentClass && (
-            <>
-              <div>
-                <strong>Class : </strong>
-                <span>{studentClass.classID}</span>
-              </div>
-              <div>
-                <strong>Schedule :</strong>
-                <span>
-                  {' '}
-                  Thứ {studentClass.date}, Tiết {studentClass.startTime} - {studentClass.endTime}
-                </span>
-              </div>
-              <div>
-                <strong>Teacher : </strong>
-                <span>{studentClass.teacherName}</span>
-              </div>
-              <div>
-                <strong>Registered Students :</strong>
-                {studentClass.student.map((person) => (
-                  <div key={`student-item-${person.name}`}>
-                    <img src={person.image} alt="" style={{ width: 200 }} />
-
-                    <div>
-                      <p style={{ margin: 0 }}>{person.name}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
+  const handldeDialogClose = () => setOpen(false);
+  const handleDialogOpen = () => setOpen(true);
+  
+  
+  const ContentBox = ({ bgcolor, title, dark, isTeacher, it }) => (
+    <>
+    <div><Toaster position='top-right'/></div>
+      <Card sx={{ mb: 3, mr:3 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: 4.5,
+            py: 4.5,
+            bgcolor,
+            color: dark ? 'grey.800' : '#ffffff'
+          }}
+        >
+          {title && (
+            <Typography variant="subtitle1" color="inherit">
+              {title}
+            </Typography>
           )}
+          {!title && <Box sx={{ p: 1.15 }} />}
+        </Box>
+      </Card>
 
-          {/* Display course documents */}
-          {course?.courseDocuments && (
-            <div>
-              <strong>Course Documents:</strong>
+      {isTeacher && (
+              <Grid container justifyContent="flex-end" alignItems="center">
+                <Grid item>
+                  <Button  color="error" onClick={() => onRemoveCourseDocument(it.id)}>Remove</Button>
+                </Grid>
+              <Grid item>
+                <Button  color="secondary" onClick={() => onBtnUpdateClick(it)}>
+                  {isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'}
+                </Button>
+              </Grid>
+            </Grid>
+      )}
 
-              {course.courseDocuments.map((it) =>
-                it.type === ECourseDocumentType.NOTIFICATION ? (
-                  <div key={`course-document-item-${it.id}`}>
-                    <strong>{it.content}</strong>
+    {it?.type !== ECourseDocumentType.NOTIFICATION &&
+      (<Grid container justifyContent="flex-end" alignItems="center">
+      <Grid item>
+          <Button color='primary' onClick={() => onOpenCourseDoc(it.content)}>Download</Button>
+        </Grid>
+      </Grid>)}
+    </>
+  );
 
-                    {/* Display remove and update buttons for teacher */}
-                    {isTeacher && (
-                      <>
-                        <button onClick={() => onRemoveCourseDocument(it.id)}>Remove</button>
-                        <button onClick={() => onBtnUpdateClick(it)}>Update</button>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <div key={`course-document-item-${it.id}`}>
-                    <strong>{it.name}</strong>
-
-                    <button onClick={() => onOpenCourseDoc(it.content)}>Download</button>
-
-                    {/* Display remove and edit buttons for teacher */}
-                    {isTeacher && (
-                      <>
-                        <button onClick={() => onRemoveCourseDocument(it.id)}>Remove</button>
-                        <button onClick={() => onBtnUpdateClick(it)}>
-                          {isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )
+  const VideoBox = ({isTeacher, it}) => (
+    <>
+      <Card sx={{ mb: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-start',
+          py: 4.5,
+          color: 'grey.800'
+        }}
+      >
+          {it.name && (
+                <Typography variant="subtitle1" color="inherit">
+                  {it.name}
+                </Typography>
               )}
-            </div>
-          )}
-        </div>
-        <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} />
-        <UploadButton course_code={courseCode} />
+              {!it.name && <Box sx={{ p: 1.15 }} />}
       </Box>
+
+        <Grid item xs={12} sm={6} md={6} lg={6} sx={{objectFit:"cover", width: 720, height: 360}}>
+          <video type="video/mp4" controls id="video" ref={videoRef} src={it.content} width={"100%"} height={"100%"}>
+          <track kind="captions" />
+          </video>
+        </Grid>
+
+      </Card>
+
+        {isTeacher && (
+          <Grid lg={6} container justifyContent="flex-end">
+            <Grid item>
+                <Button  color="error" onClick={() => onRemoveCourseDocument(it.id)}>Remove</Button>
+            </Grid>
+            <Grid>
+                <Button color="secondary" onClick={() => onBtnUpdateClick(it)}>
+                  {isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'}
+                </Button>
+            </Grid>
+          </Grid>
+        )}
+    </>
+  );
+
+  return (
+    <MainCard title={`${courseCode} - ${course?.courseName}`}
+      secondary={
+        <Box display={'flex'} flexDirection={'row'} gap={1}>
+          <Button variant='contained' onClick={handleDialogOpen}>List of Students</Button>
+          {isTeacher?<UploadButton course_code={courseCode} /> : <></>}
+        </Box>
+        }>
+      <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} />
+      <Grid container spacing={gridSpacing}>
+      <Grid item xs={12}>
+        <SubCard title="Notifications">
+          <Grid container spacing={gridSpacing}>
+              {course.courseDocuments?.filter((item) => item.type === ECourseDocumentType.NOTIFICATION)
+              .map((it) =>
+              <Grid item xs={12} sm={12} md={12} lg={6} key={`course-document-item-${it.id}`}>
+                <ContentBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} bgcolor="warning.light" title={it.content} dark />
+                </Grid>
+              )}
+          </Grid>
+        </SubCard>
+      </Grid>
+
+      <Grid item xs={12}>
+        <SubCard title="Video">
+          <Grid container spacing={gridSpacing}>
+            {course.courseDocuments?.filter((item) => item.type === ECourseDocumentType.VIDEO)
+              .map((it) =>
+              <Grid item lg={12} key={`course-document-item-${it.id}`}>
+                <VideoBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} />
+              </Grid>
+              )}
+          </Grid>
+        </SubCard>
+      </Grid>
+
+      <Grid item xs={12}>
+        <SubCard title="PDF">
+          <Grid container spacing={gridSpacing}>
+            {course.courseDocuments?.filter((item) => item.type === ECourseDocumentType.FILE)
+              .map((it) =>
+              <Grid item xs={12} sm={6} md={4} lg={2} key={`course-document-item-${it.id}`}>
+                <ContentBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} bgcolor="success.light" title={it.name} dark />
+              </Grid>
+              )}
+          </Grid>
+        </SubCard>
+      </Grid>
+      </Grid>
+      <StudentList open={open} handleAddDialogClose={handldeDialogClose} studentClass={studentClass}/>
+
+    
     </MainCard>
   );
 };

@@ -2,6 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState, useRef } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { ECourseDocumentType, updateCourseDocument } from 'hooks/updateCourse';
+import { Button } from '@mui/material';
+import toast, {Toaster} from 'react-hot-toast';
+
 const UploadButton = (course_code) => {
   const inputFileRef = useRef(null);
   const [courseSelected, setCourseSelected] = useState(course_code.course_code);
@@ -34,7 +37,7 @@ const UploadButton = (course_code) => {
       };
       await updateCourseDocument(courseSelected, documentData);
       window.location.reload();
-      alert('Upload document successfully');
+      toast.success('Upload document successfully');
     } catch (error) {
       console.log(error);
     } finally {
@@ -75,7 +78,7 @@ const UploadButton = (course_code) => {
       await updateCourseDocument(course_code.course_code, documentData);
 
       setIsUploading(false);
-      alert('Upload document successfully');
+      toast.success('Upload document successfully');
     } else {
       if (isUploading || !inputFileRef.current) return;
       inputFileRef.current.accept = typeFormatted === ECourseDocumentType.FILE ? '.pdf' : '.mp4';
@@ -83,8 +86,8 @@ const UploadButton = (course_code) => {
     }
   };
   return (
-    <>
-      <button onClick={() => onClickUploadBtn(course_code)}>{isUploading ? 'Uploading...' : 'Upload document'}</button>
+    <> <div><Toaster position='top-right'/></div>
+      <Button variant='contained' color = "secondary" onClick={() => onClickUploadBtn(course_code)}>{isUploading ? 'Uploading...' : 'Upload document'}</Button>
       <input type="file" name="" id="" hidden ref={inputFileRef} onChange={onUploadFile} />
     </>
   );
