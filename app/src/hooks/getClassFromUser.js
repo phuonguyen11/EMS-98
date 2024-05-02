@@ -10,14 +10,22 @@ const getClassFromUser = async (courseCode, role) => {
     let docRef = doc(db, 'users', userId);
     let docSnap = await getDoc(docRef);
     const allCourse = docSnap.data().listCourses;
+    let isAccessed = false;
     if (allCourse) {
       // console.log(allCourse);
       for (const i of Object.entries(allCourse)) {
         if (i[0] === courseCode) {
           // console.log(i);
           studentClass = i[1].classID;
+          isAccessed = true;
           break;
         }
+      }
+    }
+    if(!isAccessed) {
+      return {
+        status: "error",
+        message: "You are not permitted to access this course!"
       }
     }
     docRef = doc(db, 'courses', courseCode);
@@ -63,13 +71,20 @@ const getClassFromUser = async (courseCode, role) => {
     let docSnap = await getDoc(docRef);
     let store = {};
     const classArray = docSnap.data().classArray;
+    let isAccessed = false;
+
     if (classArray) {
       for (const i of Object.entries(classArray)) {
         if (i[1].teacherID === userId) {
           // console.log(i[1]);
+          isAccessed = true;
           store = i[1];
         }
       }
+    }
+    if(!isAccessed) return {
+        status: "error",
+        message: "You are not permitted to access this course!"
     }
     docRef = doc(db, 'users', userId);
     docSnap = await getDoc(docRef);

@@ -130,8 +130,6 @@ const CourseDetail = () => {
 
   const handldeDialogClose = () => setOpen(false);
   const handleDialogOpen = () => setOpen(true);
-  
-  
   const ContentBox = ({ bgcolor, title, dark, isTeacher, it }) => (
     <>
     <div><Toaster position='top-right'/></div>
@@ -170,7 +168,6 @@ const CourseDetail = () => {
       )}
     </>
   );
-
   const VideoBox = ({isTeacher, it}) => (
     <>
       <Card sx={{ mb: 3 }}>
@@ -213,8 +210,10 @@ const CourseDetail = () => {
     </>
   );
 
+  console.log(studentClass)
+
   return (
-    <MainCard title={`${courseCode} - ${course?.courseName}`}
+    studentClass?.status === "error"? <MainCard title={studentClass.message}/> : <MainCard title={`${courseCode} - ${course?.courseName}`}
       secondary={
         <Box display={'flex'} flexDirection={'row'} gap={1}>
           <Button variant='contained' onClick={handleDialogOpen}>List of Students</Button>
