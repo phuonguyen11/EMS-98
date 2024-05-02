@@ -135,8 +135,8 @@ const CourseDetail = () => {
   const ContentBox = ({ bgcolor, title, dark, isTeacher, it }) => (
     <>
     <div><Toaster position='top-right'/></div>
-      <Card sx={{ mb: 3, mr:3 }}>
-        <Box
+      <Card sx={{ mb: 3, mr:3 }} onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}>
+        <Box onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -144,11 +144,12 @@ const CourseDetail = () => {
             px: 4.5,
             py: 4.5,
             bgcolor,
-            color: dark ? 'grey.800' : '#ffffff'
+            color: dark ? 'grey.800' : '#ffffff',
+            whiteSpace: 'nowrap'
           }}
         >
           {title && (
-            <Typography variant="subtitle1" color="inherit">
+            <Typography variant="subtitle1" color="inherit" onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}>
               {title}
             </Typography>
           )}
@@ -168,13 +169,6 @@ const CourseDetail = () => {
               </Grid>
             </Grid>
       )}
-
-    {it?.type !== ECourseDocumentType.NOTIFICATION &&
-      (<Grid container justifyContent="flex-end" alignItems="center">
-      <Grid item>
-          <Button color='primary' onClick={() => onOpenCourseDoc(it.content)}>Download</Button>
-        </Grid>
-      </Grid>)}
     </>
   );
 
@@ -261,7 +255,7 @@ const CourseDetail = () => {
           <Grid container spacing={gridSpacing}>
             {course.courseDocuments?.filter((item) => item.type === ECourseDocumentType.FILE)
               .map((it) =>
-              <Grid item xs={12} sm={6} md={4} lg={2} key={`course-document-item-${it.id}`}>
+              <Grid item xs={12} sm={6} md={4} lg={4} key={`course-document-item-${it.id}`}>
                 <ContentBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} bgcolor="success.light" title={it.name} dark />
               </Grid>
               )}
