@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect, useRef } from 'react';
@@ -6,7 +7,7 @@ import { ECourseDocumentType, removeCourseDocument, updateDocument } from '../..
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import getClassFromUser from 'hooks/getClassFromUser';
 import UploadButton from 'ui-component/button/UploadButton';
-import { Box, Card, Grid, Typography, Button } from '@mui/material';
+import { Box, Card, Grid, Typography, Button, Chip, Stack, CardContent } from '@mui/material';
 import toast, {Toaster} from 'react-hot-toast';
 import StudentList from 'ui-component/dialog/ViewStudentList';
 
@@ -14,8 +15,31 @@ import StudentList from 'ui-component/dialog/ViewStudentList';
 import SubCard from 'ui-component/cards/SubCard';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
+import { IconBell, IconPdf } from '@tabler/icons-react';
+import DeleteDocumentDialog from 'ui-component/dialog/DeleteDocumentDialog';
+import DialogUpdateNotification from 'ui-component/dialog/UpdateNotificationDialog';
+
 
 const CourseDetail = () => {
+  const theme = useTheme();
+
+  const chipSX = {
+    height: 24,
+    padding: '0 6px'
+  };
+
+  const chipErrorSX = {
+    ...chipSX,
+    color: theme.palette.orange.dark,
+    backgroundColor: theme.palette.orange.light,
+    marginRight: '5px'
+  };
+  const chipWarningSX = {
+    ...chipSX,
+    color: theme.palette.warning.dark,
+    backgroundColor: theme.palette.warning.light
+  };
+
   const role = localStorage.getItem('role');
   const isTeacher = role === 'teacher';
   const videoRef = useRef();
@@ -31,7 +55,31 @@ const CourseDetail = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [studentClass, setStudentClass] = useState(null);
   const [open, setOpen] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deletedID, setDeletedID] = useState("");
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
+
+  const handldeDialogClose = () => setOpen(false);
+  const handleDialogOpen = () => setOpen(true);
+
+  const handleDeleteDialogOpen = (id) => {
+    setOpenDeleteDialog(true);
+    setDeletedID(id);
+  }
+  const handleDeleteDialogClose = () => {
+    setDeletedID("");
+    setOpenDeleteDialog(false);
+  }
+
+  const handleUpdateDialogOpen = () => {
+    setOpenUpdateDialog(true);
+  }
+
+  const handleUpdateDialogClose = () => {
+    setDeletedID("");
+    setOpenUpdateDialog(false);
+  }
 
   // Tham chiếu đến input file cho document upload
   const inputFileRef = useRef(null);
@@ -42,6 +90,8 @@ const CourseDetail = () => {
     getClass();
   }, [courseCode]);
   // console.log(courseCode);
+
+
   const handleGetCourse = async () => {
     if (!courseCode) return;
 
@@ -62,12 +112,22 @@ const CourseDetail = () => {
 
   // Hàm xóa course document
   const onRemoveCourseDocument = async (documentId) => {
-    const isConfirm = confirm('Are you sure you want to remove this document?');
-
-    if (!courseCode || !isConfirm) return;
+    if (!courseCode) return;
     await removeCourseDocument(courseCode, documentId);
     handleGetCourse();
+    handleDeleteDialogClose();
   };
+
+  const updateNotification = async (document, newNotification) => {
+    // Cập nhật notification content
+    
+    await updateDocument(courseCode, {
+      ...document,
+      content: newNotification
+    });
+    handleGetCourse();
+    handleUpdateDialogClose();
+  }
 
   // Xử lí button click cho updating course document
   const onBtnUpdateClick = async (document) => {
@@ -76,15 +136,9 @@ const CourseDetail = () => {
 
     // Nếu document là 1 notification, prompt nội dung mới
     if (document.type === ECourseDocumentType.NOTIFICATION) {
-      const newNotification = prompt('Enter new notification content:', document.content);
-      if (!newNotification) return;
-
-      // Cập nhật notification content
-      await updateDocument(courseCode, {
-        ...document,
-        content: newNotification
-      });
-      handleGetCourse();
+      handleUpdateDialogOpen()
+      // await updateNotification(document)
+      // setOpenUpdateDialog(false);
     } else {
       // Nếu document là 1 file, kích hoạt thao tác nhập file để cập nhật
       if (isUploading || !inputFileRef.current) return;
@@ -92,6 +146,7 @@ const CourseDetail = () => {
       inputFileRef.current.click();
     }
   };
+
   const onUploadFile = async (e) => {
     const file = e.target.files?.[0];
 
@@ -128,44 +183,34 @@ const CourseDetail = () => {
     }
   };
 
-  const handldeDialogClose = () => setOpen(false);
-  const handleDialogOpen = () => setOpen(true);
-  const ContentBox = ({ bgcolor, title, dark, isTeacher, it }) => (
+  const ContentBox = ({ bgcolor, title, isTeacher, it }) => (
     <>
     <div><Toaster position='top-right'/></div>
-      <Card sx={{ mb: 3, mr:3 }} onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}>
-        <Box onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            px: 4.5,
-            py: 4.5,
-            bgcolor,
-            color: dark ? 'grey.800' : '#ffffff',
-          }}
-        >
-          {title && (
-            <Typography variant="subtitle1" color="inherit" onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}>
-              {title}
-            </Typography>
-          )}
-          {!title && <Box sx={{ p: 1.15 }} />}
-        </Box>
+      <Card sx={{ mb: 3, mr:3, backgroundColor: bgcolor }}>
+        <CardContent>
+          <Grid container direction="column">
+            <Grid item xs={12}>
+              <Stack direction="row" spacing={2}>
+                {it.type === ECourseDocumentType.FILE? <IconPdf stroke={1.5} size="1.3rem" /> : <IconBell stroke={1.5} size="1.3rem"/>}
+                <Typography variant="subtitle1"  onClick={() => it.type === ECourseDocumentType.FILE? onOpenCourseDoc(it.content) : <></>}>{title}</Typography>
+              </Stack>
+            </Grid>
+        {isTeacher && (
+                  <Grid item xs={12}>
+                    <Grid container justifyContent="flex-end" alignItems="center">
+                        <Grid item>
+                          <Chip label="Remove" sx={chipErrorSX} clickable onClick={()=> handleDeleteDialogOpen(it.id)} />
+                        </Grid>
+                        <Grid item>
+                          <Chip label={isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'} sx={chipWarningSX} clickable onClick={() => onBtnUpdateClick(it)} />
+                        </Grid>
+                    </Grid>
+              </Grid>
+        )}
+        </Grid>
+        </CardContent>
       </Card>
 
-      {isTeacher && (
-              <Grid container justifyContent="flex-end" alignItems="center">
-                <Grid item>
-                  <Button  color="error" onClick={() => onRemoveCourseDocument(it.id)}>Remove</Button>
-                </Grid>
-              <Grid item>
-                <Button  color="secondary" onClick={() => onBtnUpdateClick(it)}>
-                  {isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'}
-                </Button>
-              </Grid>
-            </Grid>
-      )}
     </>
   );
   const VideoBox = ({isTeacher, it}) => (
@@ -198,19 +243,15 @@ const CourseDetail = () => {
         {isTeacher && (
           <Grid lg={6} container justifyContent="flex-end">
             <Grid item>
-                <Button  color="error" onClick={() => onRemoveCourseDocument(it.id)}>Remove</Button>
+                <Chip label="Remove" sx={chipErrorSX} clickable onClick={()=> handleDeleteDialogOpen(it.id)} />
             </Grid>
             <Grid>
-                <Button color="secondary" onClick={() => onBtnUpdateClick(it)}>
-                  {isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'}
-                </Button>
+                <Chip label={isUploading && documentSelected?.id === it.id ? 'Updating...' : 'Edit'} sx={chipWarningSX} clickable onClick={() => onBtnUpdateClick(it)} />
             </Grid>
           </Grid>
         )}
     </>
   );
-
-  console.log(studentClass)
 
   return (
     studentClass?.status === "error"? <MainCard title={studentClass.message}/> : <MainCard title={`${courseCode} - ${course?.courseName}`}
@@ -254,16 +295,17 @@ const CourseDetail = () => {
             {course.courseDocuments?.filter((item) => item.type === ECourseDocumentType.FILE)
               .map((it) =>
               <Grid item xs={12} sm={6} md={4} lg={4} key={`course-document-item-${it.id}`}>
-                <ContentBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} bgcolor="success.light" title={it.name} dark />
+                <ContentBox it={it} isTeacher={isTeacher} key={`course-document-item-${it.id}`} bgcolor={theme.palette.secondary.light} title={it.name} />
               </Grid>
               )}
           </Grid>
         </SubCard>
       </Grid>
       </Grid>
-      <StudentList open={open} handleAddDialogClose={handldeDialogClose} studentClass={studentClass}/>
+      <StudentList open={open} handleDialogClose={handldeDialogClose} studentClass={studentClass}/>
+      <DeleteDocumentDialog open={openDeleteDialog} handldeDialogClose={handleDeleteDialogClose} deleteDocument={()=>onRemoveCourseDocument(deletedID)}/>
+      <DialogUpdateNotification open={openUpdateDialog} handldeDialogClose={handleUpdateDialogClose} selectedNotification={documentSelected} updateNotification={updateNotification} />
 
-    
     </MainCard>
   );
 };
