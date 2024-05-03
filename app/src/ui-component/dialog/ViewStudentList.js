@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { userIcon } from "ui-component/icons";
 
-const StudentList = ({studentClass, open, handleAddDialogClose}) => {
-  const onClose = () => handleAddDialogClose();
+const StudentList = ({studentClass, open, handleDialogClose}) => {
+  const onClose = () => handleDialogClose();
     
   return (
     <Dialog
