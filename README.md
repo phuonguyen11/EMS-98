@@ -4,7 +4,9 @@ This repository contains the files necessary to set up for the app.
 
 ## Live App Cloud Version : https://ems-98.netlify.app/
 Admin account: admin@gmail.com/Admin1234@
+
 Student account: cse.student@hcmut.edu.vn/cse.student
+
 Teacher account: anh.phan@hcmut.edu.vn/Anh.phan@123
 
 ## Setup Instructions
